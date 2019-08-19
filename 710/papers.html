@@ -1,0 +1,657 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+<title>Papers: Fundamental Software Analysis</title>
+</head>
+
+<body bgcolor="#fff6e5">
+
+<h1><center>Papers: Fundamentals of Software Analysis</center></h1>
+
+    <ul>
+        <h4>Static Analysis</h4>
+	<li><a name="coverity"></a>
+            <a href="http://www.cs.columbia.edu/~junfeng/reliable-software/papers/coverity.pdf">        A few Billion Lines of code Later using static Analysis to find Bugs in the Real World</a>.
+                Dawson Engler et al. (CACM 2010)
+        </li>
+        <li><a name="cfl-reach"></a>
+        <a href="http://research.cs.wisc.edu/wpis/papers/tr1386.pdf">
+        Program Analysis via Graph Reachability</a>. Thomas Reps. (ISLP 1997)</li>
+        <li><a name="callgraph"></a>
+        <a href="http://www.cs.ucla.edu/~palsberg/paper/oopsla00.pdf">
+        Scalable Propagation-Based Call Graph Construction
+Algorithms</a>. Frank Tip and Jens Palsberg. (OOPSLA 2000)</li>
+                 <li><a name="type-atomicity"></a>
+        <a href="http://users.soe.ucsc.edu/~cormac/papers/pldi03.pdf">
+        Type-Based Race Detection for Java</a>. Cormac Flanagan and Stephen N. Freund. (PLDI 2000)</li>
+                   <li><a name="race-static"></a>
+        <a href="https://a4bf0b58-a-62cb3a1a-s-sites.googlegroups.com/site/gatechpag/pubs/pldi06.pdf?attachauth=ANoY7cpH-dDoODhsSnVk1EhxWVSVrh3vPd86prrxbqhXFWJ29KzQsDSSCRiezFtJst2pslOVHnUz_8QPyAya0QZqSKK2ot1iJBdVGv6AdpCXDzPzFnAHFTUK6XkjhrGfLyOmimlTcBVX0Y6tnKL6Cq7Ll7HOZ9tU0XYcK3OgBsJkCnorj4jZoL7vaY6-3DNatRragzngIF8qw2tbq17BWzAx_r9Br2A3FA%3D%3D&attredirects=0">
+        Effective Static Race Detection for Java</a>.
+        Mayur Naik, Alex Aiken, and John Whaley. (PLDI 2006)</li>
+
+  
+  
+         <li><a name="type-atomicity"></a>
+        <a href="http://users.soe.ucsc.edu/~cormac/papers/pldi03.pdf">
+        A Type and Effect System for Atomicity</a>. Cormac Flanagan and Shaz Qadeer. (PLDI 2003)</li>
+                                    <li><a name="abstract-interpretation"></a>
+       			<a href="http://dl.acm.org/citation.cfm?doid=781131.781153">A Static Analyzer for Large Safety-Critical Software</a>.
+			Bruno Blanchet et al. (PLDI 2003)</li>
+ 
+<li><a name="pta-bdd"></a>
+        <a href="http://www.cs.ucla.edu/~palsberg/course/cs232/papers/Whaley-pldi04.pdf">
+        Cloning-based context-sensitive pointer alias analysis using 
+        binary decision diagrams</a>. John Whaley and Monica S. Lam. (PLDI 2004)</li>        
+
+                <li><a name="pta-obj-sensitive"></a>
+        <a href="http://plg.uwaterloo.ca/~olhotak/pubs/popl11b.pdf">
+        Pick Your Contexts Well: Understanding Object-Sensitivity</a>.
+        Yannis Smaragdakis, Martin Bravenboer, and Ondrej Lhotak. (POPL 2011)</li>
+        <li><a name="flowdroid"></a>
+       			<a href="http://www.bodden.de/pubs/far+14flowdroid.pdf">
+                            FlowDroid: Precise Context, Flow, Field, Object-sensitive
+                        and Lifecycle-aware Taint Analysis for Android Apps</a>.
+                        S. Arzt et al. (PLDI 2014)</li>
+
+<h4>Dynamic Analysis</h4>
+
+                <li><a name="static-vs-dynamic"></a>
+            <a href="https://homes.cs.washington.edu/~mernst/pubs/staticdynamic-woda2003.pdf
+">Static and Dynamic Analysis: Synergy and Duality</a>.
+                Michael D. Ernst. (WODA 2003)
+        </li>
+        <li><a name="epp"></a>
+            <a href="http://dl.acm.org/citation.cfm?id=243857">Efficient Path Profiling</a>.
+                T. Ball and J. Larus. (MICRO 1996)
+        </li>
+        <li><a name="wpp"></a>
+            <a href="http://dl.acm.org/citation.cfm?id=301678">Whole Program Paths</a>. J. Larus. (PLDI 1999)
+        </li>
+                <li><a name="daikon"></a>
+            <a href="http://www.cs.washington.edu/homes/mernst/pubs/invariants-tse2001.pdf">Dynamically
+            Discovering Likely Program Invariants to Support Program Evolution</a>. M. D.
+            Ernst, J. Cockrell, W. G. Griswold, and D. Notkin. (TSE 2001)
+        </li>
+                <li><a name="slice"></a>
+        <a href="http://dl.acm.org/citation.cfm?id=776816.776855">Precise Dynamic Slicing Algorithms</a>.
+        X. Zhang and R. Gupta. (ICSE 2003)        </li>
+                <li><a name="wet"></a>
+            <a href="http://dl.acm.org/citation.cfm?id=1038935">Whole Execution Traces</a>.
+            X. Zhang and R. Gupta. (MICRO 2004)
+        </li>
+                                <li><a name="shadow"></a>
+            <a  href="http://valgrind.org/docs/shadow-memory2007.pdf">How to Shadow Every Byte
+of Memory Used by a Program</a>. N. Nethercote and J. Seward (VEE 2007)
+        </li>
+						                <li><a name="taint-forward"></a>
+            <a href="https://edmcman.github.io/papers/oakland10.pdf
+">All You Ever Wanted to Know About Dynamic Taint Analysis and Forward Symbolic Execution</a>.
+                Edward J. Schwartz, Thanassis Avgerinos, and David Brumley. (OAKLAND 2010)
+        </li>
+
+	<li><a name="asan"></a>
+            <a href="https://www.usenix.org/system/files/conference/atc12/atc12-final39.pdf
+">AddressSanitizer: A Fast Address Sanity Checker</a>.
+                Konstantin Serebryany, Derek Bruening, Alexander Potapenko, Dmitry Vyukov. (USENIX ATC 2012)
+        </li>
+  
+  	<li><a name="tsan"></a>
+            <a href="https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/35604.pdf
+">ThreadSanitizer -- data race detection in practice</a>.
+                Konstantin Serebryany, Timur Iskhodzhanov. (WBIA 2009)
+        </li>
+  
+  
+  
+       <h4>Symbolic Execution and Testing</h4>
+                     <li><a name="dart"></a>
+       			<a href="http://research.microsoft.com/en-us/um/people/pg/public_psfiles/pldi2005.pdf">DART:
+			Directed Automated Random Testing</a>.
+			Patrice Godefroid, Nils Klarlund, and
+		      Koushik Sen. (PLDI 2005)</li>
+                     <li><a name="veritesting"></a>
+       			<a href="http://research.microsoft.com/en-us/um/people/pg/public_psfiles/pldi2005.pdf">Enhancing Symbolic Execution with Veritesting</a>.
+			Thanassis Avgerinos, Alexandre Rebert, Sang Kil Cha, and David Brumley. (ICSE 2014)</li>
+                     <li><a name="klee"></a>
+	<a href="http://www.stanford.edu/~engler/klee-osdi-2008.pdf">KLEE: Unassisted and Automatic Generation of High-Coverage
+Tests for Complex Systems Programs</a>.
+			C. Cadar, D. Dunbar, and D. Engler. (OSDI 2008)</li>
+                <li><a name="symbolic-jpf"></a>
+            <a  href="https://ti.arc.nasa.gov/m/groups/rse/papers/p179-pasareanu.pdf">Symbolic PathFinder:
+Symbolic Execution of Java Bytecode</a>. C. S. Pasareanu and N. Rungta. (ASE 2010)
+        </li>
+                                       <li><a name="esd"></a>
+        <a href="http://dslab.epfl.ch/pubs/esd.pdf">
+        Execution Synthesis: A Technique for Automated Software Debugging</a>. Cristian Zamfir and George Candea. (EUROSYS 2010)</li>
+
+                        <li><a name="jalangi"></a>
+            <a  href="http://srl.cs.berkeley.edu/~ksen/papers/jalangi.pdf">Jalangi: A Selective Record-Replay and Dynamic Analysis Framework for JavaScript</a>.
+            K. Sen, S. Kalasapur, T. Brutch, and S. Gibbs (FSE 2013)
+        </li>
+                                                          <li><a name="se-survey"></a>
+        <a href="https://arxiv.org/pdf/1610.00502.pdf">
+        A Survey of Symbolic Execution Techniques</a>. Roberto Baldoni, Emilio Coppa, Daniele Cono DÕElia, Camil Demetrescu, and Irene Finocchi. (arXiv last update: 2017)</li>
+
+
+                        <h4>Debugging and Bug Finding</h4>
+<li><a name="delta-debugging"></a>
+        <a href="https://www.st.cs.uni-saarland.de/publications/files/zeller-esec-1999.pdf">Simplifying and Isolating
+        Failure-Inducing Input</a>. A. Zeller and R. Hildebrandt. (TSE 2002)</li>
+      <li><a name="slam"></a>
+       			<a href="https://www.ursuletz.com/~weimer/2011-6610/reading/p1-ball.pdf">The SLAM Project: Debugging System Software via Static Analysis</a>.
+			Thomas Ball and Sriram K. Rajamani. (POPL 2002)</li>
+    
+<li><a name="findbugs"></a>
+        <a href="http://www.cs.nyu.edu/~lharris/papers/findbugsPaper.pdf
+">Finding Bugs is Easy</a>. David Hovemeyer and William Pugh. (SIGPLAN NOTICES 2004)</li>
+                <li><a name="cpminer"></a>
+        <a href="http://pages.cs.wisc.edu/~shanlu/paper/OSDI04-CPMiner.pdf">CP-Miner: A
+            Tool for Finding Copy-paste and Related Bugs in Operating System Code</a>. Z.
+            Li, S. Lu, S. Myagmar, and Y. Y. Zhou. (OSDI 2004)
+        </li>
+        <li><a name="statistical-debugging"></a>
+        <a href="http://dl.acm.org/citation.cfm?id=1065014">Scalable Statistical Bug
+        Isolation</a>. B. Liblit, M. Naik, A. X. Zheng, A. Aiken, and M. I. Jordan.
+        (PLDI 2005)</li>
+        <li><a name="emi"></a>
+        <a href="http://vuminhle.com/pdf/pldi14-emi.pdf">Compiler Validation via Equivalence Modulo Inputs</a>. Vu Le, Mehrdad Afshari, and Zhendong Su.
+        (PLDI 2014)</li>
+               <li><a name="leak-icse08"></a>
+        <a href="http://www.ics.uci.edu/~guoqingx/papers/xu-icse08.pdf">Precise Memory
+Leak Detection for Java Software using Container Profiling</a>. G. Xu and A.
+Rountev. (ICSE 2008)
+ </li>
+
+
+    <h4>Security</h4>
+                   <li><a name="cfi"></a>
+        <a href="https://users.soe.ucsc.edu/~abadi/Papers/cfi-tissec-revised.pdf">Control-Flow Integrity
+Principles, Implementations, and Applications</a>. Martin Abadi, Mihai Budiu, òlfar Erlingsson, Jay Ligatti (TISSEC 2009)
+ </li>
+		                      <li><a name="dfi"></a>
+        <a href="https://timharris.uk/papers/2006-osdi.pdf">Securing software by enforcing data-flow integrity</a>. Miguel Castro, Manuel Costa, Tim Harris (OSDI 2006)
+ </li>
+	    <li><a name="wit"></a>
+        <a href="https://www.doc.ic.ac.uk/~cristic/papers/wit-sp-ieee-08.pdf">Preventing memory error exploits with WIT</a>. Periklis Akritidis, Cristian Cadar, Costin Raiciu, Manuel Costa, Miguel Castro (IEEE S&P 2008)
+ </li>
+	    	    <li><a name="cpi"></a>
+        <a href="https://www.doc.ic.ac.uk/~cristic/papers/wit-sp-ieee-08.pdf">Code-Pointer Integrity</a>. Volodymyr Kuznetsov, Laszl o Szekeres, Mathias Payer, George Candea, R. Sekar, Dawn Song (OSDI 2014)
+ </li>
+	    
+
+	<li><a name="aeg"></a>
+        <a href="http://security.ece.cmu.edu/aeg/aeg-current.pdf">Automatic exploit generation</a>. T Avgerinos, SK Cha, A Rebert, EJ Schwartz, M Woo, D Brumley (CACM 2014)
+ </li>	
+	
+	<li><a name="timing-channel"></a>
+        <a href="https://crypto.stanford.edu/~dabo/pubs/papers/ssl-timing.pdf">Remote timing attacks are practical</a>. David Brumley, Dan Boneh (USENIX SECURITY 2003)
+ </li>	
+		<li><a name="meltdown"></a>
+        <a href="https://meltdownattack.com/meltdown.pdf">Meltdown</a>. Moritz Lipp et al. (2018)
+ </li>	
+		<li><a name="spectre"></a>
+        <a href="https://spectreattack.com/spectre.pdf">Spectre Attacks: Exploiting Speculative Execution</a>. Paul Kocher et al. (2018)
+ </li>		
+		
+    <li><a name="cimplifier"></a>
+        <a href="https://www.cs.colostate.edu/~ldecarli/docs/papers/fse17-cimplifier.pdf">Cimplifier: Automatically Debloating Containers</a>. Vaibhav Rastogi, Drew Davidson, Lorenzo De Carli, Somesh Jha, Patrick McDaniel (FSE 2017)
+ </li>
+	</ul>	   
+    
+<h3>Program Analysis Frameworks</h3>
+    <ul>
+                        <li><a name="llvm"></a>
+            <a href="http://llvm.org/pubs/2004-01-30-CGO-LLVM.html">LLVM: A Compilation Framework for Lifelong Program Analysis & Transformation
+</a>.
+                Chris Lattner and Vikram Adve. (CGO 2004)
+        </li>
+                        <li><a name="jpf"></a>
+            <a href="https://users.ece.utexas.edu/~khurshid/papers/JPF-issta04.pdf">Java PathFinder: Test Input Generation with Java PathFinder</a>.
+            W. Visser, 	C. S. Pasareanu, and S. Khurshid. (ISSTA 2004)
+        </li>
+        <li><a name="pin"></a>
+            <a href="http://www.cs.ucr.edu/~heng/teaching/cs260-winter2017/luk05pin.pdf">Pin:
+Building Customized Program Analysis Tools with Dynamic Instrumentation</a>. C.
+K. Luk et al. (PLDI 2005)
+        </li>
+	        <li><a name="bap"></a>
+            <a href="https://github.com/BinaryAnalysisPlatform/bap">
+	BAP: A binary analysis platform</a>. David Brumley, Ivan Jager, Thanassis Avgerinos, Edward J Schwartz (CAV 2011)
+        </li>
+	        <li><a name="angr"></a>
+            <a href="https://github.com/angr/angr">
+	Angr -- The Next Generation of Binary Analysis</a>. Fish Wang, Yan Shoshitaishvili (IEEE S&P 2016)
+        </li>
+                        <li><a name="jikesrvm"></a>
+            <a href="http://people.cs.umass.edu/~moss/papers/ibm-systems-2005-jikes-rvm-open-source.pdf">
+                Jikes RVM: The Jikes Research Virtual Machine project: Building an open-source research community</a>.
+            B. Alpern et al. (IBM Systems Journal 2005)
+        </li>
+        <li><a name="valgrind"></a>
+            <a href="http://valgrind.org/docs/valgrind2007.pdf">Valgrind: A Framework for Heavyweight Dynamic Binary
+Instrumentation</a>.
+                N. Nethercote and J. Seward. (PLDI 2007)
+        </li>
+
+                <li><a name="calfuzzer">
+</a><a href="http://srl.cs.berkeley.edu/~ksen/calfuzzer/">
+CalFuzzer: An Extensible Active Testing Framework for Concurrent Programs</a>.
+P. Joshi, M. Naik, C.-S. Park, and K. Sen. (CAV 2009)
+</li>
+        <li><a name="wala"></a>
+            <a href="http://wala.sourceforge.net/files/PLDI_WALA_Tutorial.pdf">WALA: Static and Dynamic Program Analysis using WALA</a>.
+            Julian Dolby and Manu Sridharan. (PLDI Tutorial 2010)  </li>
+
+
+        
+        <li><a name="roadrunner">
+</a><a href="http://slang.soe.ucsc.edu/cormac/papers/paste10.pdf">
+RoadRunner: The RoadRunner Dynamic Analysis Framework for Concurrent Programs</a>.
+Cormac Flanagan and Stephen N. Freund. (PASTE 2010)
+</li>
+                <li><a name="soot"></a>
+            <a href="http://www.bodden.de/pubs/lblh11soot.pdf">Soot: The Soot framework for Java program analysis:
+a retrospective</a>. Patrick Lam, Eric Bodden, Ondrej Lhotak, and Laurie Hendren (CETUS 2011)
+        </li>
+
+    </ul>
+    
+     <h3>Concurrency in Practice</h3>
+    <ul>
+    <li><a name="book-concurrency">
+</a><a href="http://www.periodicooficial.oaxaca.gob.mx/files/2011/05/EXT02-2011-05-19.pdf">
+Java Concurrency in Practice</a>.
+Brian Goetz, Tim Peierls, Joshua Bloch, Joseph Bowbeer, David Holmes, and Doug Lea. (BOOK 2006)
+</li>
+    <li>
+<a name="concurrency-error-study">
+</a><a href="http://dl.acm.org/citation.cfm?id=1346323">
+Learning from Mistakes - A Comprehensive Study on Real World Concurrency Bug Characteristics</a>.
+S. Lu, S. Park, E. S. and Y. Y. Zhou. (ASPLOS 2008)
+</li>
+        <li><a name="java-concurrency-bug">
+</a><a href="http://www.ibm.com/developerworks/library/j-concurrencybugpatterns/j-concurrencybugpatterns-pdf.pdf">
+Java concurrency bug patterns for multicore systems</a>.
+Zhi Da Luo, Yarden Nir-Buchbinder, and Raja Das. (IBM 2010)
+</li>
+        
+    </ul>
+    
+    <h3>Data Races</h3>
+    <ul>
+    <li><a name="what-is-race">
+</a><a href="ftp://ftp.cs.wisc.edu/paradyn/papers/what-are-races.pdf">
+What are Race Conditions: Some Issues and Formalizations</a>.
+Robert Netzer and Barton Miller. (LOPLAS 1992)
+</li>
+    <li>
+    <a name="portend"></a>
+    <a href="http://dslab.epfl.ch/pubs/portend.pdf">
+    Data Races vs. Data Race Bugs: Telling the Difference with Portend</a>.
+    Baris Kasikci, Cristian ZamÞr, and George Candea. (ASPLOS 2012)
+</li>
+<li>
+<a name="eraser">
+</a><a href="http://www.cs.washington.edu/homes/tom/pubs/eraser.pdf">
+Eraser: A Dynamic Data Race Detector for Multithreaded Programs</a>.
+Stefan Savage et al. (TOCS 1997)</li>
+<li><a name="fasttrack">
+</a><a href="http://slang.soe.ucsc.edu/cormac/papers/pldi09.pdf">
+FastTrack: Efficient and Precise Dynamic Race Detection</a>.
+Cormac Flanagan, Stephen N. Freund. (PLDI 2009)
+</li>
+<li><a name="race-hybrid">
+</a><a href="http://web5.cs.columbia.edu/~junfeng/09fa-e6998/papers/hybrid.pdf">
+Hybrid Dynamic Data Race Detection</a>.
+Robert O'Callahan and Jong-Deok Choi. (PPOPP 2003)
+</li>
+
+<li>
+<a name="racefuzzer">
+</a><a href="http://dl.acm.org/citation.cfm?id=1375584">
+Race Directed Random Testing of Concurrent Programs</a>.
+Koushik Sen. (PLDI 2008)</li>
+
+<li>
+<a name="literace">
+</a><a href="http://www.cs.columbia.edu/~junfeng/reliable-software/papers/literace.pdf">
+LiteRace: Effective Sampling for Lightweight Data-Race Detection</a>.
+Daniel Marino, Madanlal Musuvathi, Satish Narayanasamy. (PLDI 2009)</li>
+
+<li>
+<a name="pacer">
+</a><a href="http://www.cse.ohio-state.edu/~mikebond/pacer-pldi-2010.pdf">
+Pacer: Proportional Detection of Data Races</a>.
+Michael D. Bond, Katherine E. Coons, Kathryn S. McKinley. (PLDI 2010)
+</li>
+<li>
+<a name="data-collider">
+</a><a href="http://research.microsoft.com/pubs/139266/DataCollider%20-%20OSDI2010.pdf">
+Effective Data-Race Detection for the Kernel</a>.
+John Erickson, Madanlal Musuvathi, Sebastian Burckhardt, Kirk Olynyk. (OSDI 2010)
+</li>
+<li>
+<a name="frost">
+</a><a href="http://web.eecs.umich.edu/~nsatish/papers/SOSP-11-Frost.pdf">
+Detecting and Surviving Data Races using Complementary Schedules</a>.
+K. Veeraraghavan, P. M. Chen, J. Flinn, S. Narayanasamy. (SOSP 2011)
+</li>
+       <li><a name="racerx"></a>
+        <a href="https://web.stanford.edu/~engler/racerx-sosp03.pdf">
+        RacerX: effective, static detection of race conditions and deadlocks</a>. Dawson Engler, Ken Ashcraft. (SOSP 2003)</li>
+
+
+<li>
+    <a name="race-commutativity"></a>
+    <a href="http://www.srl.inf.ethz.ch/papers/pldi14-commutativity.pdf">
+    Commutativity Race Detection</a>.
+    Dimitar Dimitrov, Veselin Raychev, Martin Vechev, and Eric Koskinen. (PLDI 2014)
+</li>
+
+
+<li>
+    <a name="rvpredict"></a>
+    <a href="http://fsl.cs.illinois.edu/FSL/papers/2014/huang-meredith-rosu-2014-pldi/huang-meredith-rosu-2014-pldi-public.pdf">
+    Maximal Sound Predictive Race Detection With Control Flow Abstraction</a>.
+    Jeff Huang, Patrick Meredith, and Grigore Rosu. (PLDI 2014)
+</li>
+    </ul>
+    
+    <h3>Atomicity, Serializability, and Linearizability</h3>
+    <ul>
+
+<li>
+<a name="atomizer">
+</a><a href="http://slang.soe.ucsc.edu/cormac/papers/scp08.pdf">
+Atomizer: A Dynamic Atomicity Checker for Multithreaded Programs</a>.
+Cormac Flanagan, Stephen N. Freund. (POPL 2004)
+</li>
+<li>
+<a name="velodrome">
+</a><a href="http://slang.soe.ucsc.edu/cormac/papers/pldi08.pdf">
+Velodrome: A Sound and Complete Dynamic Atomicity Checker for Multithreaded Programs</a>.
+C. Flanagan, S. N. Freund, J. Yi. (PLDI 2008)
+</li>
+
+<li>
+<a name="ctrigger">
+</a><a href="http://www.stanford.edu/class/cs240/readings/asplos092-zhou.pdf">
+CTrigger: Exposing Atomicity Violation Bugs from Their Hiding Places</a>.
+Soyeon Park, Shan Lu, and Yuanyuan Zhou. (ASPLOS 2009)
+</li>
+<li>
+<a name="assetfuzzer">
+</a><a href="http://www.cs.cityu.edu.hk/~wkchan/papers/icse10-lai+cheung+chan.pdf">
+Detecting Atomic-Set Serializability Violations in Multithreaded Programs through Active Randomized Testing</a>.
+Zhifeng Lai et al. (ICSE 2010)
+</li>
+<li>
+<a name="line-up">
+</a><a href="http://research.microsoft.com/en-us/projects/chess/pldi015-burckhardt.pdf">
+Line-Up: A Complete and Automatic Linearizability Checker</a>.
+Sebastian Burckhardt, Chris Dern, Madanlal Musuvathi, Roy Tan. (PLDI 2010)
+</li>
+</ul>
+    <h3>Deadlocks</h3>
+    <ul>
+        <li>
+<a name="gadara">
+<a href="http://www.usenix.org/events/osdi08/tech/full_papers/wang/wang.pdf">
+Gadara: Dynamic Deadlock Avoidance for Multithreaded Programs</a>.
+Yin Wang et al. (OSDI 2008)
+</li>
+<li>
+    <a name="deadlockfuzzer">
+<a href="http://dl.acm.org/citation.cfm?id=1542489">
+A Randomized Dynamic Program Analysis Technique for Detecting Real Deadlocks</a>.
+Pallavi Joshi, Chang-Seo Park, Koushik Sen, Mayur Naik. (PLDI 2009)
+</li>
+<li>
+<a name="deadlock-static">
+<a href="https://a4bf0b58-a-62cb3a1a-s-sites.googlegroups.com/site/gatechpag/pubs/icse09.pdf?attachauth=ANoY7cpkTq5s4jfWE1eSi9fJhSJO8_bEieSj5wMP0f3l8UtpjCMYvm90bxLkLfm8JRnNcs7gmrO7f8LnR_THz_lua3abIuBTfStwg_wcCwzbS1dLOH3vYtfJsTZUzufna5NldRpC1yvi3WNnCbOBgaWnjv6yylClzaapD1Y7N2xe27u7oJMht1Gx_jnpXIILrXVybcb2Ruq6puhBw7KWDQiMUiixEmYycQ%3D%3D&attredirects=0">
+Effective Static Deadlock Detection</a>.
+Mayur Naik, Chang-Seo Park, Koushik Sen, and David Gay. (ICSE 2009)
+</li>
+
+<li>
+    <a name="conlock">
+<a href="http://www.cs.cityu.edu.hk/~wkchan/papers/icse2014-cai+wu+chan.pdf">
+ConLock: A Constraint-Based Approach to Dynamic Checking on Deadlocks in Multithreaded Programs</a>.
+Yan Cai et al. (ICSE 2014)
+</li>
+
+
+    </ul>
+           <h3>Testing, Isolation, and Repairing</h3>
+    <ul>
+     <li>
+<a name="chess-algorithm">
+</a><a href="http://research.microsoft.com/en-us/projects/chess/pldi07-iterativecontextbounding.pdf">
+Iterative Context Bounding for Systematic Testing of Multithreaded Programs</a>.
+Madan Musuvathi and Shaz Qadeer. (PLDI 2007)
+</li>
+          <li>
+<a name="chess">
+</a><a href="http://research.microsoft.com/pubs/77961/osdi2008-CHESS.pdf">
+Finding and Reproducing Heisenbugs in Concurrent Programs</a>.
+Madanlal Musuvathi et al. (OSDI 2008)
+</li>
+
+     
+     <li>
+<a name="isolator">
+</a><a href="http://research.microsoft.com/pubs/72307/Isolator%20-%20Dynamically%20Ensuring%20Isolation%20in%20Concurrent%20Programs.pdf">
+ISOLATOR: Dynamically Ensuring Isolation in Concurrent Programs</a>.
+Sriram Rajamani et al. (ASPLOS 2009)
+</li>
+          <li>
+<a name="order-law">
+</a><a href="http://infoscience.epfl.ch/record/161286/files/popl168gf-attiya.pdf">
+Laws of Order: Expensive Synchronization in Concurrent Algorithms Cannot be Eliminated</a>.
+Hagit Attiya et al. (POPL 2011)
+</li>
+          <li>
+<a name="maple">
+</a><a href="http://web.eecs.umich.edu/~nsatish/papers/OOPSLA-12-Maple.pdf">
+Maple: A Coverage-Driven Testing Tool for Multithreaded Programs</a>.
+Jie Yu, Satish Narayanasamy, Cristiano Pereira, and Gilles Pokam. (OOPSLA 2012)
+</li>     
+          <li>
+<a name="c-fix">
+</a><a href="https://www.usenix.org/system/files/conference/osdi12/osdi12-final-103.pdf">
+Automated Concurrency-Bug Fixing</a>.
+Guoliang Jin, Wei Zhang, Dongdong Deng, Ben Liblit, and Shan Lu. (OSDI 2012)
+</li>
+           <li>
+<a name="axis">
+</a><a href="http://dl.acm.org/citation.cfm?id=2337259">
+AXIS: Automatically Fixing Atomicity Violations Through Solving Control Constraints</a>.
+Peng Liu and Charles Zhang. (ICSE 2012)
+</li>    
+     </ul>
+       <h3>Memory Consistency Models</h3>
+    <ul>
+        <li><a name="jmm"></a>
+            <a href="http://rsim.cs.illinois.edu/Pubs/popl05.pdf">
+            The Java Memory Model</a>. Jeremy Manson, William Pugh, Sarita V. Adve. (POPL 2005)
+        </li>
+                <li><a name="memory-models">
+</a><a href="http://cacm.acm.org/magazines/2010/8/96610-memory-models-a-case-for-rethinking-parallel-languages-and-hardware/pdf">
+Memory Models: A Case for Rethinking Parallel Languages and Hardware</a>.
+Sarita V. Adve, Hans-J. Boehm. (CACM 2010)
+        </li>
+                 <li><a name="memory-model-primer">
+</a><a href="http://dl.acm.org/citation.cfm?id=2028905">
+A Primer on Memory Consistency and Cache Coherence</a>.
+Daniel J. Sorin, Mark D. Hill, and David A. Wood. (BOOK 2011)
+        </li>
+     <li>       
+<a name="adv-mem">
+</a><a href="http://slang.soe.ucsc.edu/cormac/papers/pldi10.pdf">
+Adversarial Memory For Detecting Destructive Races</a>.
+Cormac Flanagan, Stephen N. Freund. (PLDI 2010)</li>
+           
+<li>
+<a name="drfx">
+</a><a href="http://www.eecs.umich.edu/~nsatish/papers/PLDI-10-DRFx.pdf">
+DRFx: A Simple and Efficient Memory Model for Concurrent Programming Languages</a>.
+Daniel Marino et al. (PLDI 2010)</li>
+
+<a name="mensat">
+</a><a href="http://people.csail.mit.edu/emina/pubs/memsat.pldi10.pdf">
+MemSAT: Checking Axiomatic SpeciÞcations of Memory Models</a>.
+Emina Torlak, Mandana Vaziri, and Julian Dolby. (PLDI 2010)</li>
+<li>
+<a name="sc-llvm">
+</a><a href="http://web.eecs.umich.edu/~nsatish/papers/PLDI-11-SC-Preservation.pdf">
+A Case for an SC-Preserving Compiler</a>.
+Daniel Marino, Abhayendra Singh, Todd Millstein, Madanlal Musuvathi, and Satish Narayanasamy. (PLDI 2011)</li>
+
+
+<li>
+<a name="sc-hardware">
+</a><a href="http://www.cs.ucla.edu/~todd/research/isca12.pdf">
+End-To-End Sequential Consistency</a>.
+Abhayendra Singh, Satish Narayanasamy, Daniel Marino, Todd Millstein, and Madanlal Musuvathi. (ISCA 2012)</li>
+
+
+    </ul>
+    
+       <h3>Multithreaded Record and Replay</h3>
+    <ul>
+        <li>
+<a name="pres">
+</a><a href="http://opera.ucsd.edu/paper/pres-sosp09.pdf">
+PRES: Probabilistic Replay with Execution Sketching on Multiprocessors</a>.
+Soyeon Park et al. (SOSP 2009)
+</li>
+
+
+<li>
+<a name="leap">
+</a><a href="http://www.cs.ust.hk/~charlesz/academic/leap.pdf">
+LEAP: Lightweight Deterministic Multi-processor Replay of Concurrent Java Programs</a>.
+Jeff Huang, Peng Liu, and Charles Zhang.
+(FSE 2010)
+</li>
+<li>
+<a name="pinplay">
+</a><a href="http://dl.acm.org/citation.cfm?id=1772958">
+PinPlay: A Framework for Deterministic Replay and Reproducible Analysis of Parallel Programs</a>.
+Harish Patil et al. (CGO 2010)
+</li>
+    <li>
+<a name="doubleplay">
+</a><a href="http://web.eecs.umich.edu/~nsatish/papers/ASPLOS-11-DoublePlay.pdf">
+DoublePlay: Parallelizing Sequential Logging and Replay</a>.
+Kaushik Veeraraghavan et al. (ASPLOS 2011)
+    </li>
+    
+<li>
+<a name="clap">
+</a><a href="http://0391b35.netsolhost.com/academic/clap.pdf">
+CLAP: Recording Local Executions to Reproduce Concurrency Failures</a>.
+Jeff Huang, Charles Zhang, and Julian Dolby. (PLDI 2013)
+</li>
+
+
+<li>
+<a name="ddos">
+</a><a href="http://homes.cs.washington.edu/~luisceze/publications/asplos021-hunt.pdf">
+DDOS: Taming Nondeterminism in Distributed Systems</a>.
+Nicholas Hunt, Tom Bergan, Luis Ceze, Steven D. Gribble. (ASPLOS 2013)
+</li>
+</ul>
+    
+<h3>Deterministic Multithreading</h3>
+    <ul>
+<li>
+<a name="kendo">
+</a><a href="http://people.csail.mit.edu/mareko/asplos073-olszewski.pdf">
+Kendo: Efficient Deterministic Multithreading in Software</a>.
+Marek Olszewski, Jason Ansel, Saman Amarasinghe. (ASPLOS 2009)
+</li>
+
+<li>
+<a name="dmp"></a>  
+<a href="http://www.cs.washington.edu/homes/luisceze/publications/asplos004-devietti.pdf">
+    DMP: Deterministic Shared Memory Multiprocessing</a>.
+Joseph Devietti, Brandon Lucia, Luis Ceze, Mark Oskin. (ASPLOS 2009)
+</li>
+
+<li>
+<a name="coredet">
+</a><a href="http://www.cs.washington.edu/homes/tbergan/papers/asplos10-coredet.pdf">
+CoreDet: A Compiler and Runtime System for Deterministic Multithreaded Execution</a>.
+Tom Bergan et al. (ASPLOS 2010)
+</li>
+<li>
+<a name="parrot">
+</a><a href="http://www.cs.columbia.edu/~junfeng/papers/parrot-sosp13.pdf">
+PARROT: A Practical Runtime for Deterministic, Stable, and Reliable Threads</a>.
+Heming Cui et al. (ASPLOS 2010)
+</li>
+<li>
+<a name="dthreads">
+</a><a href="http://people.cs.umass.edu/~emery/pubs/dthreads-sosp11.pdf">
+Dthreads: Efficient Deterministic Multithreading</a>.
+Tongping Liu, Charlie Curtsinger, Emery D. Berger. (SOSP 2011)
+</li>
+  </ul>
+    
+      <h3>Concurrency Programming Models</h3>
+    <ul>
+<li>
+<a name="concurrency-error-patterns">
+</a><a href="https://cs.uwaterloo.ca/~ftip/pubs/popl2006.pdf">
+Associating Synchronization Constraints with Data in an Object-Oriented Language</a>.
+Mandana Vaziri, Frank Tip, and Julian Dolby. (POPL 2006)
+</li>
+
+<li>
+<a name="grace">
+</a><a href="http://www.cs.umass.edu/~emery/pubs/grace-oopsla09.pdf">
+Grace: Safe Multithreaded Programming for C/C++</a>.
+Emery D. Berger, Ting Yang, Tongping Liu, Gene Novark. (OOPSLA 2009)
+</li>
+<li>
+<a name="DPJ-Overview">
+</a><a href="https://www.usenix.org/legacy/event/hotpar09/tech/full_papers/bocchino/bocchino.pdf">
+Parallel Programming Must Be Deterministic by Default</a>.
+Robert L. Bocchino Jr., Vikram S. Adve, Sarita V. Adve, Marc Snir. (HotPar 2009)
+</li>
+
+    </ul> 
+    
+<h3>Transactional Memory</h3>
+<ul>
+
+<li>
+<a name="log-tm">
+</a><a href="http://research.cs.wisc.edu/multifacet/papers/hpca06_logtm.pdf">
+LogTM: Log-based Transactional Memory</a>.
+Kevin E. Moore, Jayaram Bobba, Michelle J. Moravan, Mark D. Hill, and David A. Wood. (HPCA 2006)
+</li>
+<li>
+<a name="hybrid-tm">
+</a><a href="http://pages.cs.wisc.edu/~david/courses/cs758/Fall2009/papers/damron_hytm_asplos2006.pdf">
+Hybrid Transactional Memory</a>.
+Peter Damron, Alexandra Fedorova, Yossi Lev, Victor Luchangco, Mark Moir, and Daniel Nussbaum. (ASPLOS 2006)
+</li>
+<li>
+<a name="stm-strong-isolation">
+</a><a href="https://homes.cs.washington.edu/~djg/papers/tm_pldi07.pdf">
+Enforcing Isolation and Ordering in STM</a>.
+Tatiana Shpeisman et al. (PLDI 2007)
+</li>
+<li>
+<a name="memprotect-tm">
+</a><a href="http://www.cs.illinois.edu/~zilles/papers/ufo_hybridTM.isca2008.pdf">
+Using Hardware Memory Protection to Build a High-Performance, Strongly Atomic Hybrid Transactional Memory</a>.
+L. Baugh et al. (ISCA 2008)
+</li>
+</ul>
+
+<br><p>
+</p></body></html>
