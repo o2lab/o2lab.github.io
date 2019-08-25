@@ -1,0 +1,480 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  
+  <meta http-equiv="Content-Style-Type" content="text/css"/>
+  <meta name="generator" content="pandoc"/>
+  <title>CSCE710</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="bootstrap.min.css" type="text/css">
+  <style>
+      .nav { font-size: 18px; }
+  </style>
+  </link>
+</head>
+<body>
+<div class="container">
+
+<!-- Static navbar -->
+<div class="navbar navbar-default">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="https://o2lab.github.io/710/">CSCE710</a>
+    </div>
+    <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+            <li><a href="a0.html">Assignment 0</a></li>
+            <li class="active"><a href="a1.html">Assignment 1</a></li>
+            <li><a href="a2.html">Assignment 2</a></li>
+            <li><a href="project.html">Project</a></li>
+        </ul>
+    </div>
+</div>
+<div id="header" class="page-header">
+<h1 class="title">Assignment 1</h1>
+</div>
+<div id="TOC">
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#part-0-getting-started">Part 0: Getting Started</a><ul>
+<li><a href="#installing-soot">Installing Eclipse and Soot</a></li>
+<li><a href="#quickstart-soot">Quick Start with Soot</a></li>
+<li><a href="#practice-soot">Practice with Soot Tutorial</a></li>
+</ul></li>
+<li><a href="#part1">Part 1: Control Flow Analysis - Finding Dominators</a></li>
+<li><a href="#part2">Part 2: Data Flow Analysis - Call Graph Construction</a><ul>
+<li><a href="#a-simple-example">A Simple Example</a></li>
+<li><a href="#compare-call-graph">Comparing Different Call Graph Construction Algorithms</a></li>
+</ul></li>
+<li><a href="#part3">Part 3: Program Instrumentation with Soot</a><ul>
+<li><a href="#log-method-call">Logging Method Calls</a></li>
+<li><a href="#trace-heap-access">Tracing Heap Accesses</a></li>
+</ul></li>
+<li><a href="#turnin">Turnin Instructions</a></li>
+</ul>
+</div>
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The purpose of this assignment is to get you acquainted with static analysis. In particular, it will help you get familiar with <a href="http://sable.github.io/soot/">Soot</a>, a popular framework for analyzing Java programs (including Android applications).</p>
+<p>From a high level view, Soot transforms Java programs into an intermediate representation (IR), which can then be analyzed much easier than directly analyzing Java bytecode or the parse tree.
+The primary IR in Soot is called Jimple, which is a typed three-address code (but very easy to read).
+Soot provides many out-of-the-box analyses on Jimple.</p>
+</div>
+<div id="part-0-getting-started" class="section level1">
+<h1>Part 0: Getting Started</h1>
+<p>In this section, we’ll get started by downloading Soot and setting up your development environment.
+    We will use <a href="http://eclipse.org/">Eclipse</a> in this tutorial. However, you are free to use any other IDEs such as <a href="https://www.jetbrains.com/idea/">Intellij IDE</a> or <a href="https://code.visualstudio.com/">VS Code</a> for the development.
+If you are not familiar with Eclipse, read <a href="http://www.vogella.com/tutorials/Eclipse/article.html">this tutorial</a>.</p>
+<div id="installing-soot" class="section level3">
+<h3>Installing Eclipse and Soot</h3>
+<p>In your Eclipse workspace, create a new Java project "<code>a1</code>".
+Download <a href="soot-3.3.0.jar">soot-3.3.0.jar</a> into the directory "<code>a1/lib</code>".
+It is an all-in-one file that contains all the required libraries from Soot nightly build. Alternatively, you can run the following script to download soot:</p>
+<pre><code>$ mkdir lib
+$ cd lib
+$ sudo curl https://soot-build.cs.uni-paderborn.de/public/origin/master/soot/soot-master/3.3.0/build/sootclasses-trunk-jar-with-dependencies.jar -o soot-3.3.0.jar
+</code></pre>
+<p>In Eclipse, add <code>soot-3.3.0.jar</code> to the build path of project "<code>a1</code>".</p>
+</div>
+
+    <p>     <font color="red"><strong>Bonus</strong></font>: Soot has also plugin support for Eclipse (though a bit outdated). Download <a href="https://eclipse.org/downloads/packages/eclipse-standard-432/keplersr2/">Eclipse Kepler</a> and <a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html">Java 7</a>, and follow <a href="https://github.com/Sable/soot/wiki/Running-Soot-as-Eclipse-Plugin">this page</a> to install the Soot plugin.
+The Soot plugin will help you generate and browse Jimple code.</p>
+<div id="quickstart-soot" class="section level3">
+<h3>Quick Start with Soot</h3>
+<p>Download <a href="TestSoot.java">TestSoot.java</a> and <a href="HelloThread.java">HelloThread.java</a>, and add them to the project source folder in Eclipse.</p>
+<p>The code in <code>TestSoot.java</code> uses Soot to analyze <code>HelloThread.java</code> and print the Jimple statements in each method of the class <code>HelloThread</code>.</p>
+<p>The main method is shown below:</p>
+<pre><code>public class TestSoot extends BodyTransformer {
+	public static void main(String[] args)	{
+	    String mainclass = "HelloThread";
+
+	    //set classpath
+	    String bootpath = System.getProperty("sun.boot.class.path");
+	    String javapath = System.getProperty("java.class.path");
+	    String path = bootpath + File.pathSeparator +javapath;
+	    Scene.v().setSootClassPath(path);
+
+            //add an intra-procedural analysis phase to Soot
+	    TestSoot analysis = new TestSoot();
+	    PackManager.v().getPack("jtp").add(new Transform("jtp.TestSoot", analysis));
+
+            //load and set main class
+	    Options.v().set_app(true);
+	    SootClass appclass = Scene.v().loadClassAndSupport(mainclass);
+	    Scene.v().setMainClass(appclass);
+	    Scene.v().loadNecessaryClasses();
+            
+            //start working
+	    PackManager.v().runPacks();
+	}
+</code></pre>
+<p><code>TestSoot</code> extends <code>BodyTransformer</code> and overrides the method<code>internalTransform</code>,
+which will be called when the Jimple body of each analyzed method is traversed by Soot.</p>
+<pre><code>@Override
+    protected void internalTransform(Body b, String phaseName, Map&#60;String, String> options) {
+        Iterator&#60;Unit> it = b.getUnits().snapshotIterator();
+	while(it.hasNext()){
+	    Stmt stmt = (Stmt)it.next();
+	    System.out.println(stmt);
+	}
+</code></pre>
+</div>
+<div id="practice-soot" class="section level3">
+<h3>Practice with Soot Tutorial</h3>
+<p>Browse <a href="https://github.com/Sable/soot/wiki/Instrumenting-Android-Apps-with-Soot">Instrumenting Android Apps with Soot</a> if you would like to analyze Android apps.</p>
+    <p>If you want to learn more, work through this excellent tutorial: <a href="http://www.brics.dk/SootGuide/sootsurvivorsguide.pdf">A Survivor's Guide to Java Program Analysis with Soot</a>.</p>
+</div>
+</div>
+<div id="part1" class="section level1">
+<h1>Part 1: Control Flow Analysis - Finding Dominators</h1>
+<p>In this section, we’ll implement a classical control flow analysis: finding dominators of a statement.
+When you’re done with this part, you should have a basic understanding of control flow analysis.</p>
+<p>By definition, a node <code>d</code> dominates a node <code>n</code> if every path from the entry node to <code>n</code> must go through <code>d</code>, and every node dominates itself.</p>
+<p><strong>Your task</strong>: given a method <code>m</code> and a statement <code>s</code>, to find all the statements in <code>m</code> that dominate <code>s</code>.</p>
+<p>We will use the following algorithm where <code>D(n)</code> denotes a set of dominators of a node <code>n</code>:</p>
+<pre><code> D(n0) := { n0 }
+ for n in N - { n0 } do D(n) := N;
+ while changes to any D(n) occur do
+    for n in N - {n0} do
+        D(n) := {n} U (intersect of D(p) over all predecessors p of n)
+</code></pre>
+<p>You are provided with sample code <a href="TestDominatorFinder.java">TestDominatorFinder.java</a>, <a href="DominatorFinder.java">DominatorFinder.java</a> and a test program
+<a href="GCD.java">GCD.java</a> that computes the greatest common divisor of two integers.
+<code>TestDominatorFinder</code> first uses Soot to build a control flow graph for each method,
+and constructs a <code>DominatorFinder</code> object for each control flow graph.
+For each statement, it then computes its dominators via the <code>DominatorFinder</code> object and prints them out. The relevant code is shown below:</p>
+<pre><code>@Override
+protected void internalTransform(Body b, String phaseName, Map&#60;String, String> options) {
+    UnitGraph g = new ExceptionalUnitGraph(b);
+    DominatorFinder analysis = new DominatorFinder(g);
+    Iterator it = b.getUnits().iterator();
+    while (it.hasNext()){
+        Stmt s = (Stmt)it.next();
+        List dominators = analysis.getDominators(s);
+        Iterator dIt = dominators.iterator();
+        while (dIt.hasNext()){
+            Stmt ds = (Stmt)dIt.next();
+            String info = s+" is dominated by "+ds;
+            System.out.println(info);
+        }
+    }
+}
+</code></pre>
+<p>The class <code>DominatorFinder</code> has been partially implemented. You will need to complete the method <code>doAnalysis</code>.
+You may also add new fields and methods.</p>
+<pre><code>public class DominatorFinder&#60;N> {
+    DirectedGraph&#60;N> graph;
+    protected Map&#60;N,BitSet> nodeToFlowSet;
+    Map&#60;Integer,N> indexToNode;
+
+    public DominatorFinder(DirectedGraph&#60;N> graph){
+        this.graph = graph;
+        doAnalysis();
+    }
+
+    protected void doAnalysis(){
+        //your code starts here
+    }
+
+    public List&#60;N> getDominators(Object node){
+        //reconstruct list of dominators from bitset
+        List&#60;N> result = new ArrayList&#60;N>();
+        BitSet bitSet = nodeToFlowSet.get(node);
+        for(int i=0;i&#60;bitSet.length();i++) {
+            if(bitSet.get(i)) {
+                result.add(indexToNode.get(i));
+            }
+        }
+        return result;
+    }
+}
+</code></pre>
+<p><strong>Hints</strong></p>
+<ul>
+<li>Since dominator analysis is fundamental, it may have already been implemented in Soot.
+Try to search in <a href="https://github.com/Sable/soot/">Soot source code</a> to find existing code that you can learn from.</li>
+</ul>
+</div>
+<div id="part2" class="section level1">
+<h1>Part 2: Data Flow Analysis - Call Graph Construction</h1>
+<p>A call graph is a pre-requisite for almost every interprocedural analysis for object-oriented programs such as Java.
+In this section, we’ll learn how to use Soot to construct call graphs. After this section, you'll have a basic sense of inter-procedural data flow analysis.</p>
+<div id="a-simple-example" class="section level3">
+<h3>A Simple Example</h3>
+<p>Consider <a href="Example.java">Example.java</a>, the code shown below. <strong>Question</strong>: which method does <code>animal.saySomething()</code> in the <code>main</code> method call? </p>
+<pre><code>public class Example {
+    static Animal neverCalled() {
+        return new Fish();
+    }
+    static Animal selectAnimal() {
+        return new Cat();
+    }
+    public static void main(String[] args) {
+        Animal animal = selectAnimal();
+        animal.saySomething();
+    }
+}
+abstract class Animal {
+    public abstract void saySomething();
+}
+class Cat extends Animal {
+    public void saySomething() {
+        System.out.println("purr");
+    }
+}
+class Dog extends Animal {
+    public void saySomething() {
+        System.out.println("woof");
+    }
+}
+class Fish extends Animal {
+    public void saySomething() {
+        System.out.println("...");
+    }
+}
+class Car {  // not an Animal
+    public void saySomething() {
+        System.out.println("honk!");
+    }
+}
+</code></pre>
+<p><strong>Answer</strong>: <code>animal.saySomething()</code> calls <code>Cat.saySomething()</code>.
+But, how to write an analysis to find that?</p>
+<p>A simple way is to do a class hierarchy analysis (<strong>CHA</strong>), that identifies, at a call <code>o.f()</code>, the type of <code>o</code> and all its subtypes,
+and returns all the methods <code>f()</code> defined in these types. However, this is not very precise.
+For example, it will also report <code>animal.saySomething()</code> calls <code>Fish.saySomething()</code>, which is not true.</p>
+<p>Another way is to find out which object (created in the program) that the reference <code>o</code> can refer to and return method <code>f()</code> of that object.
+For example, we can find that <code>animal</code> can only refer to the <code>Cat</code> object created in method <code>selectAnimal()</code>,
+and hence we can determine that <code>animal.saySomething()</code> only calls <code>Cat.saySomething()</code>.
+The analysis of finding which object a variable may reference is called points-to analysis (<strong>PTA</strong>).
+The result obtained by PTA is often more precise than CHA. However, PTA is not as simple as CHA.
+It needs to analyze the data flow in the whole program, and often takes much more time and memory than CHA.</p>
+<p>Besides CHA and PTA, there are a few other classical call graph construction algorithms,
+such as Reachabilty Analysis (<strong>RA</strong>), Rapid Type Analysis (<strong>RTA</strong>),
+Class Type Analysis (<strong>CTA</strong>), Separate Type Analysis (<strong>XTA</strong>),
+Variable Type Analysis (<strong>VTA</strong>),
+k-order Control Flow Analysis (<strong>k-CFA</strong>), etc.
+Please read <a href="http://indefinitestudies.org/2011/10/03/survey-of-call-graph-and-points-to-algorithms-in-java/">this page</a> for a good summary of them.</p>
+
+</div>
+<div id="compare-call-graph" class="section level3">
+<h3>Comparing Different Call Graph Construction Algorithms</h3>
+<p>Soot has implemented both CHA and PTA, in addition to a few others. CHA is implemented in class <code>CHATransformer</code>,
+and PTA is based on the <a href="spark.pdf">Spark pointer analysis toolkit</a>.
+Read <a href="spark.pdf">the spark paper</a> for more details. You are provided with sample code <a href="TestSootCallGraph.java">TestSootCallGraph.java</a>,
+which can test both CHA and PTA. In <code>TestSootCallGraph</code>, you are provided with the following code,
+which prints out every call edge and the total number of call edges in class <code>Example</code>.</p>
+<pre><code>int numOfEdges =0;
+CallGraph callGraph = Scene.v().getCallGraph();
+for(SootClass sc : Scene.v().getApplicationClasses()){
+    for(SootMethod m : sc.getMethods()){
+	Iterator&#60;MethodOrMethodContext> targets = new Targets(callGraph.edgesOutOf(m));
+            while (targets.hasNext()) {
+		numOfEdges++;
+		SootMethod tgt = (SootMethod) targets.next();
+		System.out.println(m + " may call " + tgt);
+	    }
+    }
+}
+System.err.println("Total Edges:" + numOfEdges);
+</code></pre>
+<p><strong>Your task</strong>: run <code>TestSootCallGraph</code> on <code>Example</code> (add both <a href="TestSootCallGraph.java">TestSootCallGraph.java</a> and <a href="Example.java">Example.java</a> to your project source folder) to compare the precision and speed between CHA and PTA.
+In addition, you need to read the Soot code of CHA and PTA to understand how they work.
+</p>
+</div>
+</div>
+<div id="part3" class="section level1">
+<h1>Part 3: Program Instrumentation with Soot</h1>
+<p>Another powerful usage of Soot is program transformation:
+taking an input program (Java source code or bytecode), it supports adding/removing code at the Jimple level, and outputs a new program.
+One typical task we can do with this feature is to add instrumentation code into the program, e.g.,
+to profile the program execution. In this section, you will learn how (easy it is) to do that with Soot.</p>
+<div id="log-method-call" class="section level3">
+<h3>Logging Method Calls</h3>
+<p>Suppose we want to log all the method calls in the main method of <a href="Example.java">Example.java</a> we used in Part 2.
+We need to add two print statements in the main method at lines 2 and 4 below:</p>
+<pre><code>1. public static void main(String[] args) {
+2.    System.out.println("calling selectAnimal");
+3.    Animal animal = selectAnimal();
+4.    System.out.println("calling saySomething");
+5.    animal.saySomething();
+6. }</code></pre>
+<p>Since many Soot analyses operate at the Jimple level, we'll add the two print statements at Jimple.
+The Jimple code of the original main method is shown below:</p>
+<pre><code>public static void main(java.lang.String[]){
+    java.lang.String[] r0;
+    Animal r1;
+    r0 := @parameter0: java.lang.String[];
+    r1 = staticinvoke &#60;Example: Animal selectAnimal()>();
+    virtualinvoke r1.&#60;Animal: void saySomething()>();
+    return;
+}</code></pre>
+<p>The Jimple code above is actually very intuitive and easy to understand.
+Similary, the Jimple code of the instrumented main method is shown below:</p>
+<pre><code>public static void main(java.lang.String[]){
+    java.lang.String[] r0;
+    Animal r1;
+    r0 := @parameter0: java.lang.String[];
+    $r2 = &#60;java.lang.System: java.io.PrintStream out>;
+    virtualinvoke $r2.&#60;java.io.PrintStream: void println(java.lang.String)>("calling selectAnimal");
+    r1 = staticinvoke &#60;Example: Animal selectAnimal()>();
+    $r3 = &#60;java.lang.System: java.io.PrintStream out>;
+    virtualinvoke $r3.&#60;java.io.PrintStream: void println(java.lang.String)>("calling saySomething");
+    virtualinvoke r1.&#60;Animal: void saySomething()>();
+    return; 
+}</code></pre>
+<p>As you can see, a print statement <code>System.out.println("calling selectAnimal")</code> corresponds to two Jimple statements:
+<code>$r2 = &#60;java.lang.System: java.io.PrintStream out></code> and
+<code>virtualinvoke $r2.&#60;java.io.PrintStream: void println(java.lang.String)>("calling selectAnimal")</code>.
+What we need is to create these two Jimple statements and insert them before
+the method invoke statement <code>r1 = staticinvoke &#60;Example: Animal selectAnimal()>()</code>.
+</p>
+<p>
+The sample code below does these tasks for you. <strong>Please read carefully and understand every statement</strong>.
+You don't need to copy this code. We provide the full sample code in <a href="TestSootLogging.java">TestSootLogging.java</a> for you to play with later.</p>
+<pre><code>1. SootClass systemClass = Scene.v().loadClassAndSupport("java.lang.System");
+2. SootClass printClass = Scene.v().loadClassAndSupport("java.io.PrintStream");
+3. SootMethodRef printMethod = printClass.getMethod("void println(java.lang.String)").makeRef();
+4. SootFieldRef fr = Scene.v().makeFieldRef(systemClass,"out",RefType.v("java.io.PrintStream"),true);
+5. StaticFieldRef sfr = Jimple.v().newStaticFieldRef(fr);
+6. Local r = Jimple.v().newLocal("$r2",RefType.v("java.io.PrintStream"));
+7. AssignStmt newAssignStmt = Jimple.v().newAssignStmt(r, sfr);
+
+8. @Override
+9. protected void internalTransform(Body b, String phaseName, Map&#60;String, String> options) {
+10.	if(b.getMethod().getName().equals("main")){
+11.    	    b.getLocals().add(r);
+12.    	    Unit toInsert = b.getUnits().getFirst();
+13.    	    while(toInsert instanceof IdentityStmt)
+14.    		toInsert = b.getUnits().getSuccOf(toInsert);
+15.    	    b.getUnits().insertBefore(newAssignStmt,toInsert);
+16.	    Iterator&#60;Unit> it = b.getUnits().snapshotIterator();
+17.         while(it.hasNext()){
+18.	        Stmt stmt = (Stmt)it.next();
+19.	        if(stmt.containsInvokeExpr()){
+20.		    String name = stmt.getInvokeExpr().getMethod().getName();
+21.		    InvokeExpr printExpr = Jimple.v().newVirtualInvokeExpr(r, printMethod, StringConstant.v("calling "+name));
+22.		    InvokeStmt invokeStmt = Jimple.v().newInvokeStmt(printExpr);
+23.		    b.getUnits().insertBefore(invokeStmt,stmt);
+24.		}
+25.         }
+26.     }
+27. }
+</code></pre>
+<p>
+<strong>Code explanation</strong>:
+<ul>
+<li>Lines 1-7 create the Jimple statement <code>$r2 = &#60;java.lang.System: java.io.PrintStream out></code>.</li>
+<li>Line 10 checks if the method is "<code>main</code>".</li>
+<li>Line 11 adds the created local variable "<code>$r2</code>" to the method.</li>
+<li>Lines 12-14 finds the beginning instruction (non-identity statement) in the method.</li>
+<li>Line 15 inserts our created Jimple statement before the beginning instruction.</li>
+<strong>Note</strong>: <i>we insert before the begining instruction so that "<code>$r2</code>" can be reused when there are multiple invoke statements in the method</i>.
+<li>Lines 16-19 traverse every statement in the method and check if it contains method invocation.</li>
+<li>Line 20 gets the name of the invoked method.</li>
+<li>Lines 21-22 creates the Jimple statement <code>virtualinvoke $r2.&#60;java.io.PrintStream: void println(java.lang.String)>("calling selectAnimal")</code>,
+and Line 23 inserts it before the method invoke statement.</li>
+</ul>
+</p>
+<p><strong>Your task</strong>:
+<ul>
+    <li>Understand the code in <a href="TestSootLogging.java">TestSootLogging.java</a> and run it.
+It will generate a file <code>Example.jimple</code> in a folder "<code>sootOutput</code>" under your project directory.
+Read and understand the Jimple code in <code>Example.jimple</code>. </li>
+<li>
+In the <code>main</code> method of <code>TestSootLogging</code>, comment the statement <code>Options.v().set_output_format(1);</code> and run again.
+It will generate a Java class file <code>Example.class</code> in "<code>sootOutput</code>".
+Run <code>java Example</code> to see the output.</li>
+<pre><code>$ cd sootOutput
+$ java Example
+calling selectAnimal
+calling saySomething
+purr
+</code></pre>
+</ul>
+</p>
+</div>
+<div id="trace-heap-access" class="section level3">
+<h3>Tracing Heap Accesses</h3>
+<p>In this section, we are interested in logging every read and write statement that accesses data on the heap.
+In particular, we are interested in adding instrumentation to log thread reads and writes to field variables.
+In Java, there are two types of field variables: static field and instance field.
+For example, in <a href="HelloThread.java">HelloThread.java</a> shown below, <code>out</code> is static field of class <code>java.lang.System</code>,
+<code>x</code> is static field of class <code>HelloThread</code> and <code>y</code> is instance field of class <code>TestThread</code>.</p>
+<pre><code>public class HelloThread {
+	static int x=1;
+	public static void main(String[] args)	{
+	    TestThread t = new TestThread();
+	    t.start();
+	    int z = t.y+1/x; // race here, may throw divide by zero exception
+	    System.out.println(z);
+	}
+	static class TestThread extends Thread{
+	    int y;
+	    public void run(){
+		x=0;
+		y++;
+	    }
+	}
+}
+</code></pre>
+<p><strong>Your task</strong>: write code to instrument every field access in <code>HelloThread</code> to print out the access information.
+For example, a typical execution of the instrumented <code>HelloThread</code> will print:</p>
+<pre><code>Thread main wrote static field &#60;HelloThread: int x>
+Thread main read instance field &#60;HelloThread$TestThread: int y> of object Thread[Thread-0,5,main]
+Thread main read static field &#60;HelloThread: int x>
+Thread Thread-0 wrote static field &#60;HelloThread: int x>
+Thread main read static field &#60;java.lang.System: java.io.PrintStream out>
+Thread Thread-0 read instance field &#60;HelloThread$TestThread: int y> of object Thread[Thread-0,5,main]
+Thread Thread-0 wrote instance field &#60;HelloThread$TestThread: int y> of object Thread[Thread-0,5,main]
+</code></pre>
+<p><strong>Hints</strong></p>
+<ul>
+<li>You are provided with a logging class <a href="Log.java">Log.java</a> that has already implemented the print statements. See the method
+<code>logFieldAcc</code> below. What you only need is to invoke it with proper arguments.</li>
+<pre><code>public static void logFieldAcc(final Object o, String name, final boolean isStatic, final boolean isWrite){
+    if(isStatic)
+        System.out.println("Thread "+Thread.currentThread().getName()+(isWrite?" wrote":" read")+ " static field "+name);
+    else
+	System.out.println("Thread "+Thread.currentThread().getName()+(isWrite?" wrote":" read")+ " instance field "+name+" of object "+o);
+}
+</code></pre>
+<li>You are also provided with a sample code <a href="TestSootLoggingHeap.java">TestSootLoggingHeap.java</a> that has implemented all the other
+functions excepts the instrumentation. Ideally you only need to write less than ten lines of code in the method <code>internalTransform</code> below:</li>
+<pre><code>@Override
+protected void internalTransform(Body b, String phaseName, Map&#60;String, String> options) {
+    //we don't instrument the Log class
+    if(!b.getMethod().getDeclaringClass().getName().equals("Log")){
+	Iterator&#60;Unit> it = b.getUnits().snapshotIterator();
+	while(it.hasNext()){
+	    Stmt stmt = (Stmt)it.next();
+            if (stmt.containsFieldRef()) {
+	    //your code starts here
+                ...
+            }
+        }
+    }
+}
+</code></pre>
+</ul>
+    <p> <font color="red"><strong>Bonus</strong></font>: can you also get the value of each read and write access? That is, print the log below:</p>
+<pre><code>Thread main wrote static field &#60;HelloThread: int x> with value 1
+Thread main read instance field &#60;HelloThread$TestThread: int y> of object Thread[Thread-0,5,main] with value 0
+Thread main read static field &#60;HelloThread: int x> with value 1
+Thread Thread-0 wrote static field &#60;HelloThread: int x> with value 0
+Thread main read static field &#60;java.lang.System: java.io.PrintStream out> with value java.io.PrintStream@135fbaa4
+Thread Thread-0 read instance field &#60;HelloThread$TestThread: int y> of object Thread[Thread-0,5,main] with value 0
+Thread Thread-0 wrote instance field &#60;HelloThread$TestThread: int y> of object Thread[Thread-0,5,main] with value 1
+</code></pre>
+<p>This part is a bit challenging. You don't need to finish it in this assignment.
+However, you are encouraged to have a try if you are strongly motivated. The sample code will be released later.</p>
+</div>
+</div>
+
+</div> 
+
+</body></html>

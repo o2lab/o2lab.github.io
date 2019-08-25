@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  
+  <meta http-equiv="Content-Style-Type" content="text/css"/>
+  <meta name="generator" content="pandoc"/>
+  <title>CSCE710</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="bootstrap.min.css" type="text/css">
+  <style>
+      .nav { font-size: 18px; }
+  </style>
+  </link>
+</head>
+<body>
+<div class="container">
+
+<!-- Static navbar -->
+<div class="navbar navbar-default">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="https://o2lab.github.io/710/">CSCE710</a>
+    </div>
+    <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="a0.html">Assignment 0</a></li>
+            <li><a href="a1.html">Assignment 1</a></li>
+            <li><a href="a2.html">Assignment 2</a></li>
+            <li><a href="project.html">Project</a></li>
+        </ul>
+    </div>
+</div>
+<div id="header" class="page-header">
+<h1 class="title">Assignment 0</h1>
+</div>
+<div id="TOC">
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#part-0-getting-started">Part 0: Getting Started</a><ul>
+<li><a href="#installing-antlr">Installing ANTLR</a></li>
+<li><a href="#a-simple-example">A Simple Example</a></li>
+</ul></li>
+<li><a href="#part1">Part 1: Playing with Java Grammar and Parser</a></li>
+<li><a href="#part2">Part 2: Finding Interesting Program Facts through Parsing</a></li>
+<li><a href="#part3">Part 3: Rewrite Program Source Code with Parser</a></li>
+<li><a href="#turnin">Turnin Instructions</a></li>
+</ul>
+</div>
+<div id="recent-updates" class="section level4">
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The purpose of this assignment is to get you acquainted with Parsing. In particular, it will help you get familiar with the <a href="http://www.antlr.org">ANTLR parser generator</a> and the data structures, which you will need to understand to implement parsers.</p>
+<p>For this class, we require that you use Unix-like platforms (e.g., Linux or Mac) for development. If Unix is not your primary operating system, please use a virtual machine (e.g., <a href="https://www.virtualbox.org/">VirtualBox</a>).
+    </p>
+</div>
+<div id="part-0-getting-started" class="section level1">
+<h1>Part 0: Getting Started</h1>
+<p>In this section, we’ll get started by downloading ANTLR tool and setting up your development environment. Then we’ll test out the installation by running a simple example.</p>
+</div>
+<div id="installing-antlr" class="section level3">
+<h3>Installing ANTLR</h3>
+<p>First, create a new directory for this project:</p>
+<pre><code>$ mkdir a0
+$ cd a0</code></pre>
+<p>Download <a href="http://www.antlr.org/download/antlr-4.7-complete.jar">antlr-4.7-complete.jar</a> and add it to classpath:</p>
+<pre><code>$ sudo curl -O http://www.antlr.org/download/antlr-4.7-complete.jar
+$ mv antlr-4.7-complete.jar /usr/local/lib/
+$ export CLASSPATH="/usr/local/lib/antlr-4.7-complete.jar:$CLASSPATH"
+</code></pre>
+<p>Create aliases for the ANTLR Tool:</p>
+<pre><code>$ alias antlr4='java -jar /usr/local/lib/antlr-4.7-complete.jar'
+$ alias grun='java org.antlr.v4.runtime.misc.TestRig'
+</code></pre>
+<p>Now we’re ready to use <code>antlr4</code> to generate parser and <code>grun</code> to test it.</p>
+</div>
+<div id="a-simple-example" class="section level3">
+<h3>A Simple Example</h3>
+<p>In directory a0, put the following grammar inside file <code>Hello.g4</code>:</p>
+<pre><code>// Define a grammar called Hello
+grammar Hello;
+r  : 'hello' ID ;         // match keyword hello followed by an identifier
+ID : [a-z]+ ;             // match lower-case identifiers
+WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines</code></pre>
+<p>Then run the ANTLR tool on it:</p>
+<pre><code>$ antlr4 Hello.g4
+$ javac Hello*.java
+</code></pre>
+<p>Now test it:</p>
+<pre><code>$ grun Hello r -tree
+hello world
+^D
+(r hello world)
+</code></pre>
+<p>The <code>^D</code> means EOF on unix. The <code>-tree</code> option prints the parse tree in LISP notation.</p>
+<p>You can also look at parse trees visually:</p>
+<pre><code>$ grun Hello r -gui
+hello world
+^D</code></pre>
+<p>That pops up a dialog box showing that rule <code>r</code> matched keyword <code>hello</code> followed by identifier <code>world</code>.</p>
+<img  width="200" src="parser-gui.png"/>
+</div>
+<div id="part1" class="section level1">
+<h1>Part 1: Playing with Java Grammar and Parser</h1>
+<p>In this section, we’ll get a sense of what a real language's grammar and parser look like. When you’re done with this part, you should have a basic understanding of Java grammar and parser.</p>
+<p>Download the grammar of Java 7 defined in ANTLR language:</p>
+<pre><code>sudo curl -O https://raw.githubusercontent.com/antlr/grammars-v4/master/java8/Java8.g4
+</code></pre>
+<p>The grammar of Java 8 is something like below:</p>
+<pre><code>grammar Java8;
+
+...
+
+compilationUnit
+	:	packageDeclaration? importDeclaration* typeDeclaration* EOF
+	;
+
+packageDeclaration
+	:	packageModifier* 'package' packageName ';'
+	;
+
+packageModifier
+	:	annotation
+	;
+...
+</code></pre>
+<p>After briefly reading through the grammar, you are ready to generate a parser for it:</p>
+<pre><code>$ antlr4 Java8.g4
+</code></pre>
+<p>The generated parser contains the following files:</p>
+<pre><code>JavaLexer.java		JavaParser.java
+Java.tokens		JavaLexer.tokens
+JavaBaseListener.java	JavaListener.java
+</code></pre>
+<p>Compile the parser code and test it:</p>
+<pre><code>$ javac *.java
+$ grun Java compilationUnit *.java
+</code></pre>
+<p>Read the parser code and learn how to use it before go to the next part.</p>
+</div>
+<div id="part2" class="section level1">
+<h1>Part 2: Finding Interesting Program Facts through Parsing</h1>
+<p>We’re ready to start writing code. In this section, we’ll write a function that finds some interesting facts of a given program using the generated parser. When you’re done with this part, you should have a basic sense of static analysis.</p>
+<p>You are given a full Java program <a href="Test.java">Test.java</a> that contains a variety of statements.
+What we are interested in are a special kind of statements: those boolean variables that are used as the condition of <code>if</code> statements.
+For example, in the following code snippets, <code>quiet</code> <code>diag</code> <code>bail</code> <code>SLL</code> are such boolean variables.</p>
+<pre><code>259:    if ( !quiet ) System.err.println(f);
+			
+271:    if ( diag ) parser.addErrorListener(new DiagnosticErrorListener());
+272:    if ( bail ) parser.setErrorHandler(new BailErrorStrategy());
+273:    if ( SLL ) parser.getInterpreter().setPredictionMode(PredictionMode.SLL);</code></pre>
+<p>Your task is to write code to find out such boolean variables with <code>length > 3</code> and are only used without <code>!</code>.
+In your code you need to print out their name and line number. For example, the output for the code snippets above should be similar to this:</p>
+<pre><code>diag 271
+bail 272
+</code></pre>
+<p>You are provided with a sample code <a href="JavaParserTest.java">JavaParserTest.java</a> which has implemented the basic functionality of using
+the generated parser. For example:</p>
+<pre><code>CharStream input = new ANTLRFileStream(inputFile); // inputFile is "Test.java"
+
+JavaLexer lexer = new JavaLexer(input);
+CommonTokenStream tokens = new CommonTokenStream(lexer);
+JavaParser parser = new JavaParser(tokens); //create parser
+
+ParseTree tree = parser.compilationUnit();
+ParseTreeWalker walker = new ParseTreeWalker(); // create standard walker
+JavaListener listener = new JavaParserTest(); // create a parse tree listener
+
+walker.walk(listener, tree); // traverse parse tree with listener
+</code></pre>
+<p><code>JavaParserTest</code> is declared as a subclass of <code>JavaListener</code> and overrides the method <code>enterStatement</code>:</p>
+<pre><code>@Override
+public void enterStatement(Java7Parser.StatementContext ctx)
+{
+    System.out.println("enterStatement");
+    //your code starts here
+}
+</code></pre>
+<p>The method above will be called when a Java statement is visited during traversing the parse tree. Your entire code will be written in this method.</p>
+<p><strong>Hints</strong></p>
+<ul>
+<li>Google is your friend.</li>
+<li>Check the <a href="https://raw.githubusercontent.com/antlr/grammars-v4/master/java8/Java8.g4">Java8 grammar</a> that <code>if</code> statement is defined at line 792:
+<code>'if' '(' expression ')' statement</code>. Hence, the boolean variables we are interested in must be in <code>expression</code>.</li>
+<li>To determine if the first token in the current StatementContext <code>ctx</code> is <code>'if'</code>, use the following code:
+<pre><code>if(ctx.getStart().getText().equals("if")) {
+    //first token is 'if'
+}</code></pre>
+</li>
+</ul>
+</div>
+
+<div id="part3" class="section level1">
+<h1>Part 3: Rewrite Program Source Code with Parser</h1>
+<p>Now, let's do one more thing with the parser: add new code to the input program.
+Specifically, we want to insert printing statements into <code>Test.java</code> to print out the name and line number of the boolean variables found in the last part. For example, the following code</p>
+<pre><code>271:    if ( diag ) parser.addErrorListener(new DiagnosticErrorListener());</code></pre>
+will be transformed to
+<pre><code>271:    if ( diag ){
+            System.out.println("diag 271");
+            parser.addErrorListener(new DiagnosticErrorListener());
+        }</code></pre>
+<p><strong>Hints</strong></p>
+<ul>
+<li>You may use the class <code>TokenStreamRewriter</code> to add and print code. Example usage below:</li>
+<pre><code>TokenStreamRewriter rewriter = new TokenStreamRewriter(tokens);
+rewriter.insertBefore(token, "System.out.println("+name+" "+line+");");
+System.out.println(rewriter.getText());
+</code></pre>
+<li>The transformed code must be valid.
+Don't forget to add <code>"{"</code> and <code>"}"</code> into correct places if needed.</li>
+<li>Don't forget to preserve whitespaces. Google "antlr4 whitespace preserve" to find answers.</li>
+
+</ul>
+</div>
+<div id="turnin" class="section level1">
+<h1>Turnin Instructions</h1>
+<li>Commit all your code into your private <a href="https://github.tamu.edu/">tamu github repo</a> and share with <code>jeffhuang@tamu.edu</code>.</li>
+    <br><br>
+</div>
+</div> 
+
+</body></html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  
+  <meta http-equiv="Content-Style-Type" content="text/css"/>
+  <meta name="generator" content="pandoc"/>
+  <title>CSCE710</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="bootstrap.min.css" type="text/css">
+  <style>
+      .nav { font-size: 18px; }
+  </style>
+  </link>
+</head>
+<body>
+<div class="container">
+
+<!-- Static navbar -->
+<div class="navbar navbar-default">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="https://o2lab.github.io/710/">CSCE710</a>
+    </div>
+    <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+            <li><a href="a0.html">Assignment 0</a></li>
+            <li><a href="a1.html">Assignment 1</a></li>
+            <li class="active"><a href="a2.html">Assignment 2</a></li>
+            <li><a href="project.html">Project</a></li>
+        </ul>
+    </div>
+</div>
+<div id="header" class="page-header">
+<h1 class="title">Assignment 2</h1>
+</div>
+<div id="TOC">
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#part-0-getting-started">Part 0: Getting Started</a><ul>
+<li><a href="#installing-asm">Installing ASM</a></li>
+<li><a href="#quickstart-javaagent">Quick Start with Java Agent</a></li>
+<li><a href="#quickstart-asm">Quick Start with ASM</a></li>
+</ul></li>
+<li><a href="#part1">Part 1: Instrumenting Thread Synchronizations</a></li>
+<li><a href="#part2">Part 2: Instrumenting Field and Array Accesses</a></li>
+<li><a href="#part3">Part 3: Dynamic Data Race Detection</a></li>
+<li><a href="#turnin">Turnin Instructions</a></li>
+</ul>
+</div>
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The purpose of this assignment is to get you acquainted with dynamic analysis. In particular, it will help you get familiar with dynamic bytecode instrumentation using <a href="http://asm.ow2.org/">ASM</a>,
+a popular Java bytecode manipulation and analysis library used in many software products.</p>
+<p>From a high level view, ASM provides a simple API for decomposing, modifying, and recomposing Java bytecode.
+When used together with <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/instrument/package-summary.html">Java Agent</a>,
+it provides a powerful way to dynamically manipulate Java classes as they're being loaded into the Java Virtual Machine (JVM).
+</p>
+</div>
+<div id="part-0-getting-started" class="section level1">
+<h1>Part 0: Getting Started</h1>
+<p>In this section, we’ll get started by downloading ASM and setting up your development environment.
+<div id="installing-asm" class="section level3">
+<h3>Installing ASM</h3>
+<p>Following <a href="http://asm.ow2.org/eclipse/index.html">this page</a> to install the Eclipse ASM plugin.
+The plugin will help you automatically generate Java bytecode from source code and visualize bytecode.</p>
+<p>In your Eclipse workspace, create a new Java project "<code>a2</code>".
+Download <a href="asm-7.1.jar">asm-7.1.jar</a> into the directory "<code>a2/lib/</code>" and
+add it to the build path of the project.</p>
+<div id="quickstart-javaagent" class="section level3">
+<h3>Quick Start with Java Agent</h3>
+<p>Java provides a cool option, called "<code>javaagent</code>", to dynamically modify Java classes as they're being loaded into the JVM.
+To use this option, we simply need to write an agent - a piece of Java code that respects some format,
+and execute the command <code>java -javaagent:jarpath[=options] program</code>, where
+<code>jarpath</code> is the path to the agent, <code>options</code> is the agent options,
+and <code>program</code> is any Java program you want to run.</p>
+<p>Specifically, the agent is a JAR file containing a folder "<code>META-INF</code>", which contains a file named "<code>MANIFEST.MF</code>".
+The file "<code>MANIFEST.MF</code> must contain the attribute <code>Premain-Class</code>.
+The value of this attribute is the name of the agent class.
+The agent class implements a premain method <code>public static void premain(String agentArgs, Instrumentation inst)</code>,
+which is similar to the main application entry point. After the JVM has initialized, the premain method will be called first, then the real application main method.
+You can find more detailed description about Java agent on the <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/instrument/package-summary.html">official documentation page</a>.</p>
+<p>Let's first create an agent file "<code>iagent.jar</code>" containing only the folder "<code>META-INF</code>"
+and file "<code>MANIFEST.MF</code>", and name the agent class as <code>Transformer</code>, that is, add "<code>Premain-Class: Transformer</code>" in "<code>MANIFEST.MF</code>".</p>
+<pre><code>$ cd a2/lib
+$ mkdir META-INF
+$ echo "Premain-Class: Transformer" > META-INF/MANIFEST.MF
+$ jar cfm iagent.jar META-INF/MANIFEST.MF
+</code></pre>
+<p>Next, we create the agent class <code>Transformer</code> in the project source folder. The code is shown below:</p>
+<pre><code>public class Transformer implements ClassFileTransformer {
+    public static void premain(String agentArgs, Instrumentation inst) {
+		inst.addTransformer(new Transformer());
+    }
+    public byte[] transform(ClassLoader loader,String cname, Class&#60;?> c, ProtectionDomain d, byte[] cbuf) throws IllegalClassFormatException {
+	    System.out.println("transforming class "+cname);
+	    return cbuf;
+    }
+}
+</code></pre>
+<p>The agent class <code>Transformer</code> implements the method <code>transform</code> in the interface <code>ClassFileTransformer</code>, which will be called
+when every Java class is first loaded. The method <code>transform</code> may transform the supplied class file in <code>cbuf</code> and return a new replacement.
+We will implement a few interesting transformations using ASM later.
+For now, we simply print the loaded class name and keep <code>cbuf</code> unchanged.</p>
+<p>We provide <a href="iagent.jar">iagent.jar</a> and <a href="Transformer.java">Transformer.java</a>.
+You can run a test on <a href="HelloThread.java">HelloThread.java</a> with the following commands:</p>
+<pre><code>$ cd csce689-a2
+$ java -javaagent:lib/iagent.jar -cp bin/ HelloThread
+</code></pre>
+<p>The following log will be printed, showing the loaded classes during the execution of <code>HelloThread</code>.</p>
+<pre><code>transforming class java/lang/invoke/MethodHandleImpl
+transforming class java/lang/invoke/MemberName$Factory
+transforming class java/lang/invoke/LambdaForm$NamedFunction
+transforming class java/lang/invoke/MethodType$ConcurrentWeakInternSet
+transforming class java/lang/invoke/MethodHandleStatics
+transforming class java/lang/invoke/MethodHandleStatics$1
+transforming class java/lang/invoke/MethodTypeForm
+transforming class java/lang/invoke/Invokers
+transforming class java/lang/invoke/MethodType$ConcurrentWeakInternSet$WeakEntry
+transforming class java/lang/Void
+transforming class java/lang/IllegalAccessException
+transforming class sun/misc/PostVMInitHook
+transforming class sun/launcher/LauncherHelper
+transforming class HelloThread
+transforming class sun/launcher/LauncherHelper$FXHelper
+transforming class java/lang/Class$MethodArray
+transforming class HelloThread$TestThread
+transforming class java/lang/Shutdown
+transforming class java/lang/Shutdown$Lock
+</code></pre>
+</div>
+<div id="quickstart-asm" class="section level3">
+<h3>Quick Start with ASM</h3>
+<p>We are going to use four important classes provided in ASM to perform instrumentation: <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/ClassReader.html">ClassReader</a> <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/ClassWriter.html">ClassWriter</a>
+<a href="https://asm.ow2.io/javadoc/org/objectweb/asm/ClassVisitor.html">ClassVisitor</a> <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/MethodVisitor.html">MethodVisitor</a>. Below is a typical usage of them:</p>
+<pre><code>ClassReader cr = new ClassReader(cbuf);
+ClassWriter cw = new ClassWriter(cr, 0);
+ClassVisitor cv = new ClassAdapter(cw);
+cr.accept(cv, 0);
+cbuf = cw.toByteArray();
+
+class ClassAdapter extends ClassVisitor {
+@Override
+public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+        MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
+	return new MethodAdapter(mv);
+}
+
+</code></pre>
+<p><code>ClassVisitor</code> is a visitor to visit a Java class, often subclassed to implement specific functionality.
+For example, here we use <code>ClassAdapter</code> which extends <code>ClassVisitor</code> and overrides its visit methods.
+Similarly, <code>MethodVisitor</code> is a visitor to visit a Java method and is also often subclassed (for example, by <code>MethodAdapter</code> here) to implement instrumentation.
+<code>ClassReader</code> parses the Java byte array <code>cbuf</code> and calls the appropriate visit methods of
+a given class visitor for each field, method and bytecode instruction encountered.
+Finally, <code>ClassWriter</code> generates a new byte array taking the effect of visit methods into consideration.
+</p>
+<p><strong>Example</strong>: suppose we want to trace the thread start operation <code>Thread.start()</code> in <a href="HelloThread.java">HelloThread.java</a>,
+we'll write code in <code>MethodAdapter</code> similar to below:</p>
+<pre><code>class MethodAdapter extends MethodVisitor {
+    MethodAdapter(MethodVisitor mv) {
+	super(Opcodes.ASM5,mv);
+    }
+    @Override
+    public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
+    	switch (opcode) {
+	    case Opcodes.INVOKEVIRTUAL:
+		//check if it is "Thread.start()"
+        	if(isThreadClass(owner) && name.equals("start") && desc.equals("()V")) {
+	            mv.visitInsn(Opcodes.DUP);
+	            mv.visitMethodInsn(Opcodes.INVOKESTATIC, "Log", "logStart","(Ljava/lang/Thread;)V",false);
+		}
+	    default: mv.visitMethodInsn(opcode, owner, name, desc,itf);
+	}
+    }
+}
+</code></pre>
+<p>In the code above, we override the method <code>visitMethod</code>
+and add our instrumentation to call a method <code>Log.logStart(t)</code>
+before any <code>Thread.start()</code> instruction, where "<code>t</code>" is the thread object.
+The method <code>Log.logStart(t)</code> is below:</p>
+<pre><code>public static void logStart(final Thread t) {
+    String name = Thread.currentThread().getName();
+    String name_t = t.getName();
+    System.out.println("Thread "+name+" start new Thread "+name_t);
+}
+</code></pre>
+<p>We provide full sample code <a href="ClassAdapter.java">ClassAdapter.java</a>, <a href="MethodAdapter.java">MethodAdapter.java</a>, and <a href="Log.java">Log.java</a>.
+To test on <a href="HelloThread.java">HelloThread.java</a>, download them into your project source folder,
+and uncomment the code in the <code>transform</code> method in <a href="Transformer.java">Transformer.java</a>, then run:</p>
+<pre><code>$ java -javaagent:lib/iagent.jar -cp lib/asm-7.1.jar:bin/ HelloThread
+</code></pre>
+<p>It will print the following message:</p>
+<pre><code>Thread main start new Thread Thread-0
+</code></pre>
+<p>Google to find more ASM tutorials.
+<a href="http://s3-eu-west-1.amazonaws.com/presentations2012/30_presentation.pdf">This presentation</a> might be interesting to you.</p>
+</div>
+</div>
+<div id="part1" class="section level1">
+<h1>Part 1: Instrumenting Thread Synchronizations</h1>
+<p>In this section, we'll continue to add instrumentation to trace more thread synchronization operations.
+In addition to <code>Thread.start()</code>, we are also interested in <code>Thread.join()</code>,
+<code>Thread.wait()</code>, <code>Thread.wait(long timeout)</code>, <code>Thread.wait(long timeout, int nanos)</code>,
+<code>Thread.notify()</code>, <code>Thread.notifyAll()</code>, as well as lock and unlock operations on <code>synchronized</code> methods and blocks.</p>
+<p><strong>Your task</strong>: complete the code in <a href="MethodAdapter.java">MethodAdapter.java</a> to add all these instrumentations.
+You are also provided with all the logging methods in <a href="Log.java">Log.java</a>,
+you goal is to invoke these methods at proper bytecode locations with correct arguments.</p>
+<pre><code>public static  void logStart(final Thread t)
+public static  void logJoin(final Thread t)
+public static  void logLock(final Object lock)
+public static  void logUnlock(final Object lock) 
+public static  void logWait(final Object o)
+public static  void logNotify(final Object o)
+public static  void logNotifyAll(final Object o) 
+</code></pre>
+<p>Test your implementation with <a href="HelloThread1.java">HelloThread1.java</a>, it should print similar logging messages as below:</p>
+<pre><code>$ java -javaagent:lib/iagent.jar -cp lib/asm-5.0.3.jar:bin/ HelloThread1
+Thread main start new Thread Thread-0
+Thread Thread-0 lock object 272890728
+Thread Thread-0 wait signal on object 272890728
+Thread main start new Thread Thread-1
+Thread main lock object 854453928
+Thread main unlock object 854453928
+Thread Thread-1 lock object 272890728
+Thread Thread-1 notify signal on object 272890728
+Thread Thread-1 unlock object 272890728
+Thread Thread-0 unlock object 272890728
+</code></pre>
+<p><strong>Hints</strong></p>
+<ul>
+<li>In Java bytecode, the beginning and end of a <code>synchronized</code> block correspond to <code>MONITORENTER</code> and <code>MONITOREXIT</code>.
+In <code>MethodAdaptor</code>, you can override the method <code>visitInsn</code> to add your instrumentation.
+For <code>synchronized</code> methods, there are no corresponding <code>MONITORENTER</code> and <code>MONITOREXIT</code>.
+You need to instrument after the beginning and before the end of a synchronized method. See the sample code below.
+It has implemented most parts, but is not complete.
+<pre><code>@Override
+public void visitInsn(int opcode) {
+    switch (opcode) {
+	case Opcodes.MONITORENTER:
+	    mv.visitInsn(Opcodes.DUP);
+	    mv.visitMethodInsn(Opcodes.INVOKESTATIC, "Log", "logLock","(Ljava/lang/Object;)V",false);
+	    break;
+	case Opcodes.MONITOREXIT:
+	    mv.visitInsn(Opcodes.DUP);
+	    mv.visitMethodInsn(Opcodes.INVOKESTATIC, "Log", "logUnlock","(Ljava/lang/Object;)V",false);
+	    break;
+	case Opcodes.IRETURN:
+	case Opcodes.LRETURN:
+	case Opcodes.FRETURN:
+	case Opcodes.DRETURN:
+	case Opcodes.ARETURN:
+	case Opcodes.RETURN:
+	case Opcodes.ATHROW:
+	{
+	    if(isSynchronized){
+		if(isStatic){
+		    mv.visitInsn(Opcodes.ACONST_NULL);
+		    mv.visitMethodInsn(Opcodes.INVOKESTATIC, "Log", "logUnlock","(Ljava/lang/Object;)V",false);
+		}
+		else{
+		    mv.visitVarInsn(Opcodes.ALOAD, 0);
+		    mv.visitMethodInsn(Opcodes.INVOKESTATIC, "Log", "logUnlock","(Ljava/lang/Object;)V",false);
+		}
+	    }
+	}
+	default:break;
+    }
+    mv.visitInsn(opcode);
+}
+</code></pre>
+</li>
+</ul>
+</div>
+
+<div id="part2" class="section level1">
+<h1>Part 2: Instrumenting Field and Array Accesses</h1>
+<p>In this section, we proceed to use dynamic instrumentation to trace another kind of operations: heap accesses.
+In addition to tracing field accesses that we have done with Soot in <a href="a1.html#trace-heap-access">Assignment 1</a>,
+we are also interested in tracing array accesses. Different from the Jimple code in Soot,
+at the bytecode level there are four different field access instructions <code>GETSTATIC</code> <code>GETFIELD</code> <code>PUTSTATIC</code> <code>PUTFIELD</code>
+and 16 array access instructions
+<code>AALOAD</code> <code>BALOAD</code> <code>CALOAD</code> <code>DALOAD</code> <code>FALOAD</code> <code>IALOAD</code> <code>LALOAD</code> <code>SALOAD</code>
+<code>AASTORE</code> <code>BASTORE</code> <code>CASTORE</code> <code>DASTORE</code> <code>FASTORE</code> <code>IASTORE</code> <code>LASTORE</code> <code>SASTORE</code>.
+If you are interested in knowing all the 256 Java bytecodes (198 are currently in use) for Java 8, <a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html">here</a> is a full list of them.
+<a href="http://en.wikipedia.org/wiki/Java_bytecode_instruction_listings">Wiki</a> has also a good summary of them.</p>
+<p>We also provide the logging methods for field and array accesses in <a href="Log.java">Log.java</a>:</p>
+<pre><code>public static void logFieldAcc(final Object o, String name, final boolean isStatic, final boolean isWrite)
+public static void logArrayAcc(final Object a, int index, final boolean isWrite)
+</code></pre>
+<p><strong>Your task</strong>: write code in <a href="MethodAdapter.java">MethodAdapter.java</a> to instrument every field and array access to print out the access information.
+For example, on <a href="HelloThread2.java">HelloThread2.java</a>, it should print similar logging messages as below:</p>
+<pre><code>Thread main wrote instance field y of object HelloThread2@4a248a0a
+Thread main wrote instance field b of object HelloThread2@4a248a0a
+Thread main wrote instance field c of object HelloThread2@4a248a0a
+Thread main wrote static field x
+Thread main wrote static field z
+Thread main wrote instance field y of object HelloThread2@4a248a0a
+Thread main read instance field c of object HelloThread2@4a248a0a
+Thread Thread-0 read instance field val$hello of object HelloThread2$1@5f8a8ae7
+Thread main wrote array [index] [C@a574b2 [0]
+Thread Thread-0 read instance field c of object HelloThread2@4a248a0a
+Thread main read instance field c of object HelloThread2@4a248a0a
+Thread Thread-0 read array [index] [C@a574b2 [0]
+Thread main wrote array [index] [C@a574b2 [1]
+Thread Thread-0 read instance field val$hello of object HelloThread2$1@5f8a8ae7
+</code></pre>
+<p><strong>Hints</strong></p>
+<ul>
+<li>To instrument field accesses, you need to override the method <code>visitFieldInsn</code>:</li>
+<pre><code>@Override
+public void visitFieldInsn(int opcode, String owner, String name, String desc) {
+      switch (opcode) {
+            case GETSTATIC:
+		//your code here
+                break;
+            case PUTSTATIC:
+            	//your code here
+                break;
+            case GETFIELD:
+            	//your code here
+                break;
+            case PUTFIELD:
+            	//your code here
+		//this part is slightly more complicated
+             default: break;
+      	}
+    mv.visitFieldInsn(opcode, owner, name, desc);
+}    
+</code></pre>
+<li>To instrument array accesses, you need to handle the following cases in the method <code>visitInsn</code>:</li>
+<pre><code>case AALOAD:case BALOAD:case CALOAD:case SALOAD:case IALOAD:case FALOAD:case DALOAD:case LALOAD:
+    //your code here
+    break;
+case AASTORE:case BASTORE:case CASTORE:case SASTORE:case IASTORE:case FASTORE:
+    //your code here
+    //this part is slightly more complicated
+    break;
+case DASTORE:case LASTORE:
+    //your code here
+    //this part is slightly more complicated
+    break;
+</code></pre>
+<li>Be careful about double type and long type, they make things slightly more complicated.</li>
+<li>You would need to store and load data from stack to local variables.
+Make sure the maximal stack size and the maximum number of local variables are properly set by overriding the method <code>visitMaxs</code>:</li>
+<pre><code>@Override
+public void visitMaxs(int maxStack, int maxLocals) {
+    mv.visitMaxs(X, Y); // set X and Y to a proper value
+}
+</code></pre>
+</ul>
+<p><font color="red"><strong>Bonus</strong></font>: can you also instrument the value of each heap access?
+That is, call the following methods upon each field and array access, where <code>v</code> is the value
+read or written by the access:</p>
+<pre><code>public static void logFieldAcc(final Object o, String name, final boolean isStatic, final boolean isWrite, final Object v)
+public static void logArrayAcc(final Object a, int index, final boolean isWrite, final Object v)
+</code></pre>
+</div>
+
+<div id="part3" class="section level1">
+<h1>Part 3: Dynamic Data Race Detection</h1>
+<p>Data races, or race conditions, are an important class of concurrency errors that have caused many serious problems in real world software.
+In this section, we are going to develop a dynamic race detection tool based on the instrumention in the first two parts.</p>
+<p>By definition, a data race occurs when there exist (1) two concurrent accesses to the same data by different threads,
+(2) at least one of them is a write, and (3) the two accesses are not properly protected by synchronizations, that is,
+not protected by the same lock or there is no happens-before relation between them.</p>
+<p><strong>Your task</strong> is to implement a simple algorithm that checks the three conditions above.
+Specically, the algorithm runs in five steps:
+1. find shared data;
+2. find accesses to shared data;
+3. find pair of conflicting accesses by different threads;
+4. for each pair, check if the two accesses are protected by the same lock;
+5. for each pair, check if any one of the two accesses must happen before the other.
+The must-happen-before relation (<code>&rarr;</code>) is defined as: for two accesses <code>e1</code> and <code>e2</code>, <code>e1 &rarr; e2</code> holds
+if any of the following three conditions is satisfied:</p>
+<ul>
+<li>(i) <code>e1</code> and <code>e2</code> are by the same thread and <code>e1</code> is executed before <code>e2</code>;</li>
+<li>(ii) <code>e1</code> starts a new thread <code>t</code> and <code>e2</code> is the first event of <code>t</code>;</li>
+<li>(iii) there exists another access <code>e3</code> such that <code>e1 &rarr; e3</code> and <code>e3 &rarr; e2</code>.</li> 
+</ul>
+<p>
+For each pair of conflicting accesses by different threads,
+if both 4 and 5 are satisfied, we report a race formed by the two accesses.
+For example, for the following code snippets in <a href="HelloThread3.java">HelloThread3.java</a>,
+line 10 <code>x =1</code> and line 27 <code>r2 =x</code> form a race because they both access <code>x</code> and line 10 is a write,
+and line 27 is not protected by a lock.
+Most of your code will be written in <a href="Log.java">Log.java</a>.
+To test your implementation, you can run:
+<pre><code>java -javaagent:lib/iagent.jar -cp lib/asm-5.0.3.jar:bin/ HelloThread3</code></pre>
+It is expected to print the following message or similar:</p>
+<pre><code>Data race detected: 
+Thread main wrote static field x
+Thread Thread-0 read static field x</code></pre>
+<p>To evaluate your tool finally, you should be able to run it on a real program <a href="ftpserver.jar">ftpserver.jar</a>:</p>
+<pre><code>java -javaagent:lib/iagent.jar -cp lib/asm-5.0.3.jar:bin/:ftpserver.jar driver.FTPMainDriver</code></pre>
+<p><font color="red"><strong>Bonus</strong></font>: the race report above doesn't look very good because there is no information
+about the location of race accesses. Can you also get the class name and the line number of each access?
+That is, to report something like below:</p>
+<pre><code>Data race detected: 
+Thread main wrote static field HelloThread3.x at line 10
+Thread Thread-0 read static field HelloThread3.x at line 27</code></pre>
+<p><strong>Hints</strong></p>
+<ul>
+<li>You can get the line number of a bytecode instruction by overriding the method <code>visitLineNumber</code> in class <code>MethodAdapter</code>. </li>
+</ul>
+</div>
+
+</div> 
+
+</body></html>
