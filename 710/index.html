@@ -1,1 +1,537 @@
-710/index.html
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    
+    <title>CSCE 710: Jeff Huang</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <style type="text/css"></style>
+</head>
+
+<body bgcolor="#fff6e5">
+
+      
+        <div id="title">
+          <h2> CSCE 710: Fundamental Software Analysis </h2>
+        </div>
+
+  <div id="separator"></div>
+
+  	<center>
+
+    <table>
+	<tr valign="top">
+	  <td align="left">
+	    <ul margin="0px 0px">
+	      <li><b> Location:</b> HRBB 126</li>
+	      <li><b> Time:</b> TR 8:00-9:15am</li>
+	      <li><b> Credits:</b> 3 </li>
+	    </ul>
+	  </td>
+          
+	  <td align="left">
+	    <ul margin="0px 0px">
+	      <li><b> Instructor:</b> <a href="http://parasol.tamu.edu/~jeff/">Jeff Huang</a> </li>
+	      <li><b> Office:</b> HRBB 416 </li>
+	      <li><b> Office Hours:</b> By appointment </li>
+
+	    </ul>
+	  </td>
+	  
+	  <td align="left">
+          <ul margin="0px 0px">
+	    <li> <b> Email:</b> jeff@cse.tamu.edu<br>(Best
+            way to reach me). </li>
+	  	                  <li><b><a href="https://classroom.google.com/u/1/c/NDEwNDY5NDUyMDda">Google Classroom</a></b></li>
+
+          </ul>
+        </td>
+      </tr>
+	    
+    </table>
+    	  <b><a href="#syllabus-page"><font size="4">Course Schedule</font></a></b><p></p>
+
+    	</center>
+
+		<center>
+	<table border=0 cellpadding=5 cellspacing=1 width="60%"><tr width="50%"><td bgcolor="#cccccc"><font color="maroon">
+		<center><b>NEWS</b> 
+
+</center>
+		</font></td></tr> 
+		<tr><td bgcolor="#eeeeee">
+		<ul>
+            <li> [08/26] Welcome to CSCE 710! Please go to <a href="https://classroom.google.com/u/1/c/NDEwNDY5NDUyMDda">Google Classroom</a> for all class activities.
+            </li>
+            </ul>
+            </td>
+		</tr>
+	</table>
+	</center>
+	
+	  <div id="content">
+
+<p>
+  
+    <h3>Course Description</h3>
+
+    <p> 
+The goal of this course is to introduce how various analysis techniques can be used to manage the quality of a software application. Students will acquire fundamental knowledge of program abstraction, features, verification, testing, debugging, concurrency, reliability, security, and fault detection. The course will also discuss how to carry out the empirical experimentation for program analysis. Wherever applicable, concepts will be complemented by tools developed in academia and industry. This enables students to understand the maturity and limitations of various analysis techniques.
+
+
+          </p>
+
+    <h3> Course Goal </h3>
+
+    <p>The intent of this course is to offer the in-depth introduction to graduate students on a wide range of software analysis concepts and techniques. The topics can be explored at different levels of depths depending on the interests of the class. The content of the course is roughly divided into two general themes: program representation and program analysis. Following the first theme, we study different abstractions, representations, and interpretations of a software program itself. Following the second, we study how analysis techniques and algorithms can help interpret the runtime meaning of the program and, in turn, help us monitor and improve the quality of the software programs.</p>
+
+    <p>If you are interested in doing research in the area of software
+      analysis, this course can help you get started; if you are
+      currently involved in research in other areas such as operating
+      system, networking, security, and database, this course can help you
+      apply the techniques learned in this course to your research
+      area. </p>
+
+    <h3> Workload and Evaluation</h3>
+
+    <p>This course will have homework assignments, paper readings and presentations, a final exam and a final project.
+      The following grading policy will be used:
+          <table width="30%">
+      <tbody><tr>
+        <td valign="top"><b>90-100:</b></td>
+ 	<td> <b>A</b> 
+        </td>
+      </tr>
+	<tr>
+        <td valign="top"><b>80-89:</b></td>
+ 	<td> <b>B</b>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top"><b>70-79:</b></td>
+ 	<td> <b>C</b> </td>
+      </tr>
+      <tr>
+        <td valign="top"><b>60-69:</b></td>
+ 	<td> <b>D</b> </td>
+      </tr>
+      <tr>
+        <td valign="top"><b><60:</b></td>
+ 	<td> <b>F</b> </td>
+      </tr>
+    </tbody>
+      </table>
+	  <br>
+<table width="30%">      <tbody><tr>
+        <td valign="top"><b>Class participation:</b></td>
+ 	<td> <b>10%</b>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top"><b>Paper review and presentation:</b></td>
+ 	<td> <b>10%</b> </td>
+      </tr>
+	<tr>
+        <td valign="top"><b>Assignment:</b></td>
+ 	<td> <b>15%</b>
+        </td>
+      </tr>
+    	<tr>
+        <td valign="top"><b>Final exam:</b></td>
+ 	<td> <b>15%</b>
+        </td>
+      </tr>
+            <tr>
+        <td valign="top"><b>Final project:</b></td>
+ 	<td> <b>50%</b> </td>
+      </tr>
+
+      
+    </tbody></table>
+
+      </p>
+    
+    <p><b>Late Policy</b>: Late submission will have 2% penalty for each hour after the due time.</p>
+    
+   <h3> Assignment</h3>
+<p>	
+We'll have three <a href="p/a0.html">homework assignments</a>. These assignments will help you understand some basic principles of program analysis.
+</p> 
+<h3> Paper Presentation</h3>
+<p>We will discuss
+      a few  <a href="papers.html">important research papers</a> selected from top programming language, software
+      engineering, and computer systems conferences.
+For each paper, one student will be the designated presenter and start off the discussions.
+Each presentation should be within <b>20</b> minutes to cover the following key points of the paper:
+    <div style="text-align: justify; width: 90%"> <ul>
+
+      <li> What problem is the research trying to solve? Is it important? Why?
+    </li>
+	<li> How does the technique work?</li>
+		<li> How is the technique/algorithm evaluated?</li>
+
+			<li> What are the primary contributions of the paper as the author sees it??</li>
+	<li> How could this research be extended, or applied in other contexts?</li>
+	<li> Questions and Discussion Topics?</li>
+
+    </ul> </div>
+</p>
+<p>
+Everyone is expected to read all papers that will be discussed and participate actively in the discussions.
+Course participants will be able to indicate their preferences for papers that they want to present,
+and an effort will be made to respect everyone's preferences.
+</p>
+<p>
+You are required to <b>write a short summary</b> for each paper you read.
+The summary can include:
+<div style="text-align: justify; width: 90%"> <ul>
+
+      <li>Problem domain: background, motivation, why this problem is important/novel/interesting.
+    </li>
+	<li> Idea of the paper: assumption, main technique, result.</li>
+		<li> Comparison with related work.</li>
+			<li> Possible future work/direction.</li>
+	<li> Pros, cons of the paper (your conclusion).</li>
+	<li> What can we do based on this work: lesson learned from this work? stimulate new related problem?
+	flawed assumption/technique can be improved/extended?
+	technique can be used to other domains? ...</li>
+    </ul>
+
+The summaries are to be done individually and each summary is due before the midnight prior to the corresponding lecture
+(submit on Google Classroom).
+</div>
+</p>
+
+<h3>  Project</h3>
+<p>
+	The final project is the key of this course. It is
+      essentially a mini research project that may involve building a new
+      system, designing a new algorithm, improving an existing technique, applying an existing technique to a new domain,
+      or performing a large case study. You
+      are encouraged to come up with a topic of your own, which I'll help
+      refine; alternatively, you can choose one of the projects I suggest.
+      You must work on your project individually. The tentative timeline of the project is as follows:
+<div id="project" style="text-align: justify; width: 90%"> <ul>
+
+      <li> <b>Proposal</b>. Choose a topic and submit a 1-page proposal.
+      You will give a 5-minute presentation of your project proposal in class.
+    </li>
+	<li> <b>Project progress demo</b>. Give a 5-minute demo on the progress of your project.</li>
+			<li><b>Project final presentation</b>. Give a 20-minute presentation.</li> 
+					<li> <b>Final report</b>. Submit a 6-page final report, your source code, and all relevant data (add me to your private tamu git repo).
+</li>
+    </ul> </div>
+</p>
+ 
+    <h3>Prerequisite</h3>
+    
+    <p>There are no formal prerequisites, but it will help to have some background in programming languages, compilers, software engineering, and/or operating systems in general; and program analysis, parallel/concurrent programming, and/or software reliability in particular. </p>
+
+    <h3>Enrollment</h3>
+
+    <p>The enrollment is open to PhD and MS students.  If
+      you are an undergraduate and would like to take the course, please
+      email the instructor for special permission. </p>
+
+    <h3> Materials </h3>
+    <p>All relevant materials will be made
+      available online. </p>
+    <p> There is no required textbook, but the following two books are recommended:
+    <li>Nielson, Nielson, and Hankin. <a href="http://www.imm.dtu.dk/~hrni/PPA/ppa.html">Principles of Program Analysis (PPA)</a>. ISBN 3-
+540-65410-0. Published by Springer, 2005</li>
+        <li>
+Alfred V. Aho. Monica S. Lam. Ravi Sethi. Jeffrey D. Ullman. <a href="https://www.amazon.com/Compilers-Principles-Techniques-Tools-2nd/dp/0321486811">"Dragon Book" -- Compilers: Principles, Techniques, and Tools (2nd Edition)</a>. ISBN-13: 978-0321486813. Published by
+Addison-Wesley, 2006.</li>
+    </p>
+
+
+    <h3> Ethics & Academic Integrity </h3>
+<p>
+We will study/discuss threats and attacks in the class/lab. You should be fully aware of ethics when studying these techniques. If in any context you are not sure about where to draw the line, come talk to me first.
+</p>
+<p>
+"An Aggie does not lie, cheat, or steal or tolerate those who do." For additional information, please visit: http://aggiehonor.tamu.edu.  
+</p>
+<p>
+Upon accepting admission to Texas A&M University, a student immediately assumes a commitment to uphold the Honor Code, to accept responsibility for learning, and to follow the philosophy and rules of the Honor System. Students will be required to state their commitment on examinations, research papers, and other academic work. Ignorance of the rules does not exclude any member of the TAMU community from the requirements or the processes of the Honor System.
+</p>
+
+<h3>Americans with Disabilities Act (ADA) Statement</h3>
+<p>
+The Americans with Disabilities Act (ADA) is a federal anti-discrimination statute that provides comprehensive civil rights protection for persons with disabilities. Among other things, this legislation requires that all students with disabilities be guaranteed a learning environment that provides for reasonable accommodation of their disabilities. If you believe you have a disability requiring an accommodation, please contact Disability Services, in Cain Hall, Room B118, or call 845-1637. For additional information visit http://disability.tamu.edu.
+</p>
+    <br>
+    <br>
+      	
+              <div id="separator-syllabus"><h3 id="syllabus-page" ><center>Tentative schedule</center></h3></div>
+
+    <br>
+
+    <table id="syllabus" cellpadding="3">
+      <tbody><tr>
+        <th> Week 
+        </th><th> Topic 
+        </th><th> Readings  
+        </th><th> Speakers
+      </th>
+      </tr>
+      <tr class="oddweek">
+        <td rowspan="2" class="num"> 1 </td>
+        <td class="topic"> Overview </td>
+        <td class="assignment">  </td>
+        <td class="speaker"> Dr. Huang </td>
+	
+      </tr>
+
+      <tr class="oddweek">
+        <td class="topic"> Static and Dynamic Analyses</td>
+	
+        <td class="assignment">
+		<a href="http://web.stanford.edu/~engler/BLOC-coverity.pdf">Coverity</a>,
+				<a href="https://www.usenix.org/system/files/conference/atc12/atc12-final39.pdf">AddressSanitizer</a>,
+		<a href="https://homes.cs.washington.edu/~mernst/pubs/staticdynamic-woda2003.pdf">Static and Dynamic analysis</a>
+	</td>
+        <td class="speaker"> Dr. Huang </td>
+      </tr>
+
+      <tr class="evenweek">
+        <td rowspan="2" class="num"> 2 </td>
+        <td rowspan="2" class="topic"> Program Analysis Frameworks</td>
+        <td rowspan="2" class="assignment">	<a href="http://cs.au.dk/~mis/soot.pdf">Soot</a>,
+	<a href="http://wala.sourceforge.net/files/PLDI_WALA_Tutorial.pdf">WALA</a>,
+		<a href="http://llvm.org/pubs/2004-01-30-CGO-LLVM.html">LLVM</a>,
+		<a href="http://www.cs.ucr.edu/~heng/teaching/cs260-winter2017/luk05pin.pdf">Pin</a>	</td>
+        <td rowspan="2" class="speaker"> Dr. Huang </td>
+      </tr>
+
+      <tr class="evenweek">
+
+      </tr>
+
+      <tr class="oddweek">
+	<td rowspan="2" class="num"> 3 </td>
+ 	        <td rowspan="2" class="topic"> Data-flow Analysis</td>
+        <td rowspan="2" class="assignment">	PPA (Ch 2)</td>
+
+        <td rowspan="2" class="speaker"> Dr. Huang </td>
+      </tr>
+
+      <tr class="oddweek">
+      </tr>
+            <tr class="evenweek">
+          <td rowspan="2" class="num"> 4 </td>
+
+          <td  class="topic"> Proposal Presentation</td>
+	          <td class="assignment">
+	</td>
+        <td class="speaker">  </td>
+      </tr>
+      <tr class="evenweek">
+	        <td class="topic"> Pointer Analysis </td>
+
+
+        <td class="assignment">
+<a href="http://yanniss.github.io/points-to-tutorial15.pdf">Points-to Tutorial</a>
+	</td>
+        <td class="speaker">Dr. Huang  </td>
+      </tr>
+      <tr class="oddweek">
+			        <td rowspan="2" class="num"> 5 </td>
+
+                    <td  class="topic">  Call Graph Construction</td>
+
+
+        <td class="assignment">
+		<a href="https://ben-holland.com/call-graph-construction-algorithms-explained/
+">Call Graph Tutorial</a>
+
+	</td>
+        <td class="speaker"> Dr. Huang </td>
+
+      </tr>
+
+      <tr class="oddweek">
+          <td  class="topic">Symbolic Execution</td>
+<td  class="assignment">
+			<a href="https://people.eecs.berkeley.edu/~ksen/papers/cacm13.pdf
+">Symbolic Execution: Three Decades Later</a>,
+    
+    <a href="https://www.doc.ic.ac.uk/~cristic/papers/klee-osdi-08.pdf">KLEE</a>
+	</td>
+
+        <td class="speaker"> Dr. Huang </td>
+      </tr>
+      <tr class="evenweek">
+        <td rowspan="2" class="num"> 6 </td>
+
+        <td class="topic"> Taint Analysis </td>
+<td  class="assignment"><a href="https://edmcman.github.io/papers/oakland10.pdf">Dynamic Taint Analysis and Forward Symbolic Execution</a>
+</td>
+
+        <td class="speaker">Dr. Huang  </td>
+      </tr>
+      <tr class="evenweek">
+        <td class="topic"> Concurrency </td>
+        <td class="assignment"> <a href="http://dl.acm.org/citation.cfm?id=1346323">Concurrency bug study</a>, <a href="https://krakensystems.co/blog/2019/golang-race-detection">Golang race detection</a></td>
+	
+        <td class="speaker"> Dr. Huang </td>
+      </tr>
+
+      <tr class="oddweek">
+        <td rowspan="2" class="num"> 7 </td>
+
+	        <td class="topic"> Program Synthesis </td>
+
+        <td class="assignment"> <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/12/popl11-synthesis.pdf">Flashfill</a> </td>
+        <td class="speaker"> Dr. Huang </td>
+          
+      </tr>
+      <tr class="oddweek">
+        
+          	        <td class="topic"> Program Verification </td>
+        <td class="assignment"> <a href="https://files.sri.inf.ethz.ch/website/papers/sp20-verx.pdf">Smart Contracts Verification</a> </td>
+                  <td class="speaker"> Dr. Huang </td>
+
+      </tr>
+      <tr class="evenweek">
+	        <td rowspan="2" class="num"> 8 </td>
+
+          <td rowspan="4" class="topic"> Paper Presentation </td>
+
+        <td class="assignment">
+                                    <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.561.3430&rep=rep1&type=pdf">RaceFuzzer</a>,
+            <a href="https://songlh.github.io/paper/go-study.pdf">Golang Concurrency Bugs</a>
+          </td>
+        <td class="speaker">Yahui, Osama</td>
+
+          
+      </tr>
+
+      <tr class="evenweek">
+                            <td  class="assignment"> 
+                      <a href="https://ieeexplore.ieee.org/abstract/document/8418623">DEEPSEC</a>,
+                                              <a href="https://timharris.uk/papers/2006-osdi.pdf">Data Flow Integrity</a>
+
+ </td>
+        
+
+        <td class="speaker">Yulin, Grace</td>
+          
+         
+      </tr>
+      <tr class="evenweek">
+	        <td rowspan="2" class="num"> 9 </td>
+<td class="assignment">
+            <a href="https://dl.acm.org/citation.cfm?id=3062363">WebAssembly</a>,
+
+            <a href="https://dl.acm.org/citation.cfm?id=2661101">Gradual Typing for Python</a>
+
+	</td>
+        <td class="speaker"> Chongzhi, Diego</td>
+      </tr>
+      <tr class="evenweek">
+<td class="assignment">
+            <a href="https://files.sri.inf.ethz.ch/website/papers/sp20-verx.pdf">VerX</a>,
+
+            <a href="https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/35604.pdf">ThreadSanitizer</a>
+
+	</td>
+        <td class="speaker"> Jianwei, TBD</td>
+      </tr>
+
+      <tr class="oddweek">
+	        <td rowspan="2" class="num"> 10 </td>
+          		        <td rowspan="2" class="topic"> Project Progress Demo </td>
+
+ <td rowspan="2" class="assignment">  </td>
+        <td rowspan="2" class="speaker">  </td>
+      </tr>
+            <tr class="oddweek">
+
+      </tr>
+      <tr class="evenweek">
+	        <td rowspan="2" class="num"> 11 </td>
+
+	
+          	        <td rowspan="3" class="topic"> Paper Presentation </td>
+
+        <td class="assignment"> 
+            <a href="https://meltdownattack.com/meltdown.pdf">Meltdown</a>,
+                                      <a href="https://www.cs.utexas.edu/~isil/sqlizer.pdf">SQLizer</a>
+          </td>
+       
+	
+        <td class="speaker"> Jon, Yi</td>
+          
+      </tr>
+
+      <tr class="evenweek">
+                                  <td  class="assignment">
+            <a href="https://www.st.cs.uni-saarland.de/publications/files/zeller-esec-1999.pdf">Delta Debugging</a>,
+	<a href="https://dl.acm.org/citation.cfm?id=1368130">Debugging Reinvented</a>
+          </td>
+        <td class="speaker">Cheng, Luochao</td>
+          
+      </tr>
+            <tr class="evenweek">
+				        <td rowspan="2" class="num"> 12 </td>
+
+                                  <td  class="assignment">
+                                      
+                                      <a href="https://web.stanford.edu/~engler/deviant-sosp-01.pdf">Bugs as Deviant Behavior</a>,
+                                      <a href="http://www.cis.upenn.edu/~mhnaik/papers/pldi19.pdf">Continuous Bug Reasoning</a>
+          </td>
+        <td class="speaker">Dalton, Siwei</td>
+      </tr>
+            <tr class="oddweek">
+
+		        <td class="topic"> Project Day </td>
+
+        <td class="assignment"> Happy hacking! </td>
+        <td class="speaker"> </td>
+      </tr>
+
+            <tr class="evenweek">
+        <td rowspan="2" class="num"> 13 </td>
+		        <td rowspan="2" class="topic"> Final Project Presentation </td>
+
+        <td  rowspan="2" class="assignment"> Exciting project demos!
+	</td>
+        <td class="speaker"></td>
+      </tr>
+            <tr class="evenweek">
+        <td class="speaker"></td>
+      </tr>
+          
+                            <tr class="oddweek">
+                	        <td rowspan="2" class="num"> 14 </td>
+	        <td rowspan="2" class="topic"> </td>
+        <td  rowspan="2" class="assignment"> Thanksgiving holiday! </td>
+        <td rowspan="2" class="speaker">  </td>
+
+
+      </tr>   
+                      <tr class="oddweek">
+      </tr>
+          
+      <tr class="evenweek">
+	        <td rowspan="2" class="num"> 15 </td>
+
+		        <td rowspan="2" class="topic"> Course Review </td>
+
+        <td  rowspan="2" class="assignment"> 
+	</td>
+        <td rowspan="2"  class="speaker"></td>
+      </tr>
+	      
+
+          
+           
+      
+    </tbody></table>
+    <br>
+    <br>
+    <br>
+  </div> <!--- content --->
+
+
+
+</body></html>
