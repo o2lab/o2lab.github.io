@@ -1,5 +1,5 @@
-@import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800);
+@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800);
 
 /*------------------------------------------------------------------
 [Table of contents]
@@ -28,6 +28,7 @@ p{
 }
 
 span{
+	
 	color:#49b4ff;
 }
 
@@ -133,6 +134,7 @@ h3{
 }
 #group-member img{
 	height: 216px;
+	object-fit: cover;
 }
 
 
@@ -248,7 +250,8 @@ header{
 
 .menu li .active{
 	color:#FFF;
-	background-color: #49b4ff;
+	/* background-color: #49b4ff; */
+	background-color: #ff0000;
 }
 
 .menu .dropdown:hover .dropdown-menu{
